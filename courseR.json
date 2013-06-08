@@ -12,11 +12,7 @@
                , "description" : "An overview of working with different types of data at the R command line."
                , "section"     : "Background"
                }
-             , { "content"     : "tables"
-               , "title"       : "Working with tabular data"
-               , "description" : "An introduction to working with tables of data."
-               , "section"     : "Background"
-               }
+
              ]
              
   , "templates" : "templates/"

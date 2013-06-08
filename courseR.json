@@ -1,0 +1,31 @@
+{
+
+    "name"    : "R-Club"
+  , "content" : "content/"
+  , "toc"  : [ { "content"     : "introduction"
+               , "title"       : "An introduction to R"
+               , "description" : "A brief overview of what R is and why it has become one of the most popular platforms for data analysis in the biosciences and in data science."
+               , "section"     : "Background"
+               }
+             , { "content"     : "data-types"
+               , "title"       : "Working with simple data"
+               , "description" : "An overview of working with different types of data at the R command line."
+               , "section"     : "Background"
+               }
+             , { "content"     : "tables"
+               , "title"       : "Working with tabular data"
+               , "description" : "An introduction to working with tables of data."
+               , "section"     : "Background"
+               }
+             ]
+             
+  , "templates" : "templates/"
+  
+  , "css" : "css/"
+  , "js"  : "js/"
+  , "img" : "img/"
+  , "data": "data/"
+  
+  , "optimize" : false
+
+}

@@ -12,7 +12,6 @@
                , "description" : "An overview of working with different types of data at the R command line."
                , "section"     : "Background"
                }
-
              ]
              
   , "templates" : "templates/"

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <title> introduction </title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        
+          <link rel="stylesheet" href="css/main.css">
+                            <link rel="stylesheet" href="css/normalize.css">
+                            <link rel="stylesheet" href="css/page.css">
+                            <link rel="stylesheet" href="css/print.css">
+                            <link rel="stylesheet" href="css/tomorrow.css">
+                  
+        
+        <script src="js/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div id = "courser-content" class = "pageView">
+        
+          <div id = 'nav-buttons'>
+            <button id = 'index-button' class = 'pageButton' onclick="window.location.href='index.html'">index</button>
+          </div>
+        
+        <h1>Welcome to R!</h1>
+
+<p><img src="img/intro-example.png" alt="plot of chunk intro-example"/> </p>
+
+<p><a href="http://www.r-project.org/" title="R Project homepage">R</a> is a free software tool designed to facilitate interactive data analysis and visualization.  It has recently become <a href="http://r4stats.com/articles/popularity/">the most popular platform</a> for data analysis in the biosciences and data science community, replacing commercial software packages like SPSS and SASS.  It&#39;s name is a bit of a pun on its history:  R is a derivative of the commercial <a href="http://en.wikipedia.org/wiki/S-PLUS">S-Plus</a>, developed by <a href="http://en.wikipedia.org/wiki/Ross_Ihaka">Ross Ihaka</a> and <a href="http://en.wikipedia.org/wiki/Robert_Gentleman_(statistician">Robert Gentlemen</a>.</p>
+
+<p><a href="http://www.r-project.org/" title="R Project homepage">R</a> is really two related things: a powerful programming language designed for interactive data analysis and a huge community of researcher/programmers who have implemented analysis and visualization algorithms in R (for general statistical packages see <a href="http://cran.r-project.org/web/views/">CRAN</a>; for bioinformatics and computational biology see <a href="http://www.bioconductor.org/">BioConductor</a>).</p>
+
+<h2>Why use R?</h2>
+
+<h3>It&#39;s &ldquo;Free like Pizza&rdquo;</h3>
+
+<p><a href="http://www.r-project.org/" title="R Project homepage">R</a> is <a href="http://www.r-project.org/Licenses/GPL-2">free software</a>, in that it is free for anyone to install and use.  At W&amp;L we are fortunate enough to have the resources to pay expensive software licensing fees for commercial data analysis software like SPSS and Matlab, but this may not be the case for our collaborators or other researchers who would like to reproduce our work.  There&#39;s a compelling argument to be made that using paid-software in basic research runs counter to our obligation to make our published data publicly available and our work reproducible.</p>
+
+<h3>It&#39;s &ldquo;Free like Ideas&rdquo;</h3>
+
+<p>The design of R, and of R packages, makes it impossible to <a href="http://en.wikipedia.org/wiki/Obfuscation_(software">hide or obfuscate</a>) source code.  As a result, the sources for all of base R, along with packages on CRAN and BioConductor, are open to scrutiny by programmers, statisticians and researchers.  All programmers make mistakes, even the <a href="http://www.joelonsoftware.com/items/2007/09/26b.html">folks who make Excel</a>.  In the <a href="http://en.wikipedia.org/wiki/Proprietary_software">closed source</a> world, bugs are only caught when users pin down odd behaviors in programs.  When software is <a href="http://en.wikipedia.org/wiki/Open_source">open source</a>, many eyes can scrutinize the implementation of new algorithms, dramatically decreasing the likelihood that errors will make it into released software.  This is probably why open source software <a href="http://en.wikipedia.org/wiki/Linux_adoption">runs the internet</a>.</p>
+
+<h3>Bleeding edge</h3>
+
+<p>Because the R language was designed with statistics in mind, it offers many language features that make it easy to implement new data analysis algorithms.  Because of this, it has become the <em>de facto</em> platform for the current methodological research in statistics and data science.  It&#39;s usually the first choice for implementing and experimenting with new analysis methods, which means it&#39;s quite likely that a package is available for R which offers the latest and greatest approach for your research field.</p>
+
+<h3>Graphics and interactivity are baked in</h3>
+
+<p>There are other open source high-level scripting languages that are quite popular in research science, like <a href="http://www.python.org/">Python</a> and <a href="http://www.perl.org/">Perl</a>, that offer similar sets of advantages to R.  The recent rise in popularity of R in the biosciences and data science communities has likely been driven by a few simple usability features, that make it particularly easy to interactively explore data and easily produce publication-quality visualizations.  If you&#39;re interested in a deep analysis of the R language, including formal semantics, <a href="http://www.cs.purdue.edu/homes/jv/pubs/ecoop12.pdf">this recent paper</a> offers some great insight.</p>
+
+<h3>Why not R?</h3>
+
+<p>There&#39;s no getting around the fact that the learning curve for R is very steep, especially if you&#39;ve never programmed or worked at a command line before.  The core R software offers no user interface in the traditional desktop sense; there are no menus or buttons to click like in Excel.  Over the 20 year history of the R language there have been several efforts to create a front end interfaces for R, discouraged by the original authors of the language.  The fact that none have ever taken hold is likely a testament to the fact that a command line is a much more powerful environment for working with data than are clicky menus.  Nonetheless, when you&#39;re used to a work flow that&#39;s menu and button driven it&#39;s hard to know where to start with a tool like R.  Hopefully, though, after you&#39;ve spent some time getting familiar with the R environment you&#39;ll fall in love with the power of the command line!</p>
+
+        
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/jquery-1.9.1.min.js"><\/script>')</script>
+        
+          <script src="js/highlight-7.3.min.js"></script>
+                            <script src="js/main.js"></script>
+                            <script src="js/plugins.js"></script>
+                  
+
+    </body>
+</html>

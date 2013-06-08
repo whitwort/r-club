@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <title> data-types </title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        
+          <link rel="stylesheet" href="css/main.css">
+                            <link rel="stylesheet" href="css/normalize.css">
+                            <link rel="stylesheet" href="css/page.css">
+                            <link rel="stylesheet" href="css/print.css">
+                            <link rel="stylesheet" href="css/tomorrow.css">
+                  
+        
+        <script src="js/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div id = "courser-content" class = "pageView">
+        
+          <div id = 'nav-buttons'>
+            <button id = 'index-button' class = 'pageButton' onclick="window.location.href='index.html'">index</button>
+          </div>
+        
+        <h1>Working with simple data</h1>
+
+<h3>The command line</h3>
+
+<p>The command line, or console, is the primary mechanism that you&#39;ll use to interact with R:  you enter instructions and the R interpreter performs computations for you.  If you have a common set of tasks that you need to repeat often, or a set of instructions that are too complicated to keep track of <em>ad hoc</em>, you can save a set of commands into a text file called an R script (by convention, these files have a &ldquo;.r&rdquo; or &ldquo;.R&rdquo; at the end).</p>
+
+<p>Let&#39;s try entering some simple math expressions:</p>
+
+<pre><code class="r">1 + 2
+</code></pre>
+
+<pre><code>[1] 3
+</code></pre>
+
+<pre><code class="r">2 * 3
+</code></pre>
+
+<pre><code>[1] 6
+</code></pre>
+
+<pre><code class="r">4 ^ 5
+</code></pre>
+
+<pre><code>[1] 1024
+</code></pre>
+
+<pre><code class="r">6.7 / 8.9
+</code></pre>
+
+<pre><code>[1] 0.7528
+</code></pre>
+
+<p>As you might expect, R recognizes standard syntax for numbers and mathematical operators.  When you&#39;ve entered a complete expression at the command line and hit &ldquo;enter&rdquo;, R will evaluate the result of that expression.  If you don&#39;t tell R what to do with the result, it will just print out a representation of the value on the next line.</p>
+
+<p>Often though, you want to perform a calculation and save the result for later use.  If you&#39;ve used Excel, you&#39;ve probably used cells on a worksheet to hold the results of calculations based on the data in other cells.  In R, we can save the results of computations in variables.  To do this, we&#39;ll use the assignment operator, which is a little arrow in R <code>&lt;-</code> (if you&#39;re comming from another programming language and this syntax bothers you, you can use <code>=</code> for assignment &ndash; see help pages for additional information about edge cases):</p>
+
+<pre><code class="r">a &lt;- 10
+a
+</code></pre>
+
+<pre><code>[1] 10
+</code></pre>
+
+<pre><code class="r">
+b &lt;- a + 11
+b
+</code></pre>
+
+<pre><code>[1] 21
+</code></pre>
+
+<pre><code class="r">
+c &lt;- a / b
+c
+</code></pre>
+
+<pre><code>[1] 0.4762
+</code></pre>
+
+<p>If you&#39;re working with very large numbers, common in the sciences, there&#39;s a shorthand syntax you can use:</p>
+
+<pre><code class="r">2e10
+</code></pre>
+
+<pre><code>[1] 2e+10
+</code></pre>
+
+<pre><code class="r">2 * 10^10
+</code></pre>
+
+<pre><code>[1] 2e+10
+</code></pre>
+
+<pre><code class="r">2e10 == 2 * 10^10
+</code></pre>
+
+<pre><code>[1] TRUE
+</code></pre>
+
+<p>In that last line we used the comparison operator <code>==</code>; it tests whether or not two values are equivalent.</p>
+
+<p>Finally, let&#39;s see what happens if we try hitting <code>enter</code> before we&#39;ve finished entering a complete expression.  Type <code>2 +</code> and then hit <code>enter</code>.  You&#39;ll see a little <code>+</code> shows up as your prompt on the next line.  This is R&#39;s way of telling you the text you&#39;ve entered so far isn&#39;t a complete thought.  Finish this expression by entering another number and hitting <code>enter</code> again.</p>
+
+<h3>Everything is a vector</h3>
+
+<p>In the above expressions we appeared to be doing computations on single numbers.  In fact, something more complicated was going on under the hood.  In R all data are actually vectors of data.  Unlike other programming languages, there are no atomic values; the most basic data structure is a vector.  This may seem odd until you consider the key implication:  all operators and functions in R are built to operate on vectors of data, not just single values.  Single values are just vectors with one element.</p>
+
+<p>You can see how many elements a vector holds using the <code>length</code> function:</p>
+
+<pre><code class="r">length(10)
+</code></pre>
+
+<pre><code>[1] 1
+</code></pre>
+
+<pre><code class="r">length(c)
+</code></pre>
+
+<pre><code>[1] 1
+</code></pre>
+
+<p>Above, <code>length</code> is the first example we&#39;ve seen of an R function.  In programming functions are analogous to their mathematical counter parts: the take in one or more values and evaluate to a possibly new value.  The syntax for running, or &ldquo;calling&rdquo;, a function will always be in the form of <code>functionName(value1, value2, ...)</code>.</p>
+
+<p>The <code>length</code> function has reported that we&#39;ve been working with vectors of 1 element so far.  To <strong>c</strong>ompose a vector with more than one element, we&#39;ll use the <code>c()</code> function:</p>
+
+<pre><code class="r">c(1,2,3,4)
+</code></pre>
+
+<pre><code>[1] 1 2 3 4
+</code></pre>
+
+<pre><code class="r">d &lt;- c(5,6,7,8)
+d + 10
+</code></pre>
+
+<pre><code>[1] 15 16 17 18
+</code></pre>
+
+<p>As you can see, mathematical operators in R are built to handle vectorized operations:  we could add a 4 element vector <code>d</code> to a one element vector <code>10</code> and get a sensible result.</p>
+
+<p><strong>Side note for programmers</strong>:  if you&#39;re comming to R with a background in other programming languages, you might have caught something in the last code block that freaked you out.  We had previously assigned the variable <code>c</code> to hold a number; yet we were still able to call the built-in <code>c</code> function from this scope.  In almost any other common scripting language this would not have worked.  Although base scoping rules in R are strictly lexical, there are a number of aggressive additional checks done on failures.  For example, when an attempt is made to apply a non-function in an inner scope, the interpreter will check up-values.  Another example of this design philosophy at play in R is aggressive partial matching for named arguments in function calls.</p>
+
+<h3>Strings and Boolean values</h3>
+
+<p>So far we&#39;ve just been working with numbers (<code>numeric</code> values in R lingo), but R also supports text (<code>string</code> values) and true/false (<code>boolean</code> values) data.</p>
+
+<p>To create strings, surround your text with either double <code>&quot; ... &quot;</code> or single <code>&#39; ... &#39;</code> quotes:</p>
+
+<pre><code class="r">&quot;a&quot;
+</code></pre>
+
+<pre><code>[1] &quot;a&quot;
+</code></pre>
+
+<pre><code class="r">&#39;a&#39;
+</code></pre>
+
+<pre><code>[1] &quot;a&quot;
+</code></pre>
+
+<pre><code class="r">&quot;a&quot; == &#39;a&#39;
+</code></pre>
+
+<pre><code>[1] TRUE
+</code></pre>
+
+<pre><code class="r">c( &quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot; )
+</code></pre>
+
+<pre><code>[1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;
+</code></pre>
+
+<p>You can create strings containing single quotes using double quotes and visa versa, but if you need to make a string that contains both single and double quotes you need to use the <code>\</code> &ldquo;escape&rdquo; character:</p>
+
+<pre><code class="r">s &lt;- &quot;My data are \&quot;awesome\&quot;!&quot;
+s
+</code></pre>
+
+<pre><code>[1] &quot;My data are \&quot;awesome\&quot;!&quot;
+</code></pre>
+
+<pre><code class="r">
+message(s)
+</code></pre>
+
+<pre><code>My data are &quot;awesome&quot;!
+</code></pre>
+
+<p>The two other special string characters that you&#39;re likely to run across when working with data files are the tab <code>\t</code> and newline <code>\n</code>:</p>
+
+<pre><code class="r">s &lt;- &quot;a\tb\tc&quot;
+s
+</code></pre>
+
+<pre><code>[1] &quot;a\tb\tc&quot;
+</code></pre>
+
+<pre><code class="r">message(s)
+</code></pre>
+
+<pre><code>a b c
+</code></pre>
+
+<pre><code class="r">
+s &lt;- &quot;a\nb\nc&quot;
+s
+</code></pre>
+
+<pre><code>[1] &quot;a\nb\nc&quot;
+</code></pre>
+
+<pre><code class="r">message(s)
+</code></pre>
+
+<pre><code>a b c
+</code></pre>
+
+<p>To create boolean values use <code>TRUE</code> or <code>FALSE</code>:</p>
+
+<pre><code class="r">TRUE
+</code></pre>
+
+<pre><code>[1] TRUE
+</code></pre>
+
+<pre><code class="r">FALSE
+</code></pre>
+
+<pre><code>[1] FALSE
+</code></pre>
+
+<pre><code class="r">TRUE == FALSE
+</code></pre>
+
+<pre><code>[1] FALSE
+</code></pre>
+
+<pre><code class="r">c(TRUE, FALSE, TRUE, FALSE)
+</code></pre>
+
+<pre><code>[1]  TRUE FALSE  TRUE FALSE
+</code></pre>
+
+<h3>Missing Data</h3>
+
+<p>R has built-in support for flagging values as missing data.  The <code>NA</code> can be mixed with any kind of vector:</p>
+
+<pre><code class="r">c(1,2,NA,4)
+</code></pre>
+
+<pre><code>[1]  1  2 NA  4
+</code></pre>
+
+<pre><code class="r">c( &quot;a&quot;, NA, &quot;c&quot;, NA )
+</code></pre>
+
+<pre><code>[1] &quot;a&quot; NA  &quot;c&quot; NA 
+</code></pre>
+
+<pre><code class="r">c(TRUE, FALSE, NA, FALSE)
+</code></pre>
+
+<pre><code>[1]  TRUE FALSE    NA FALSE
+</code></pre>
+
+<p>Most R functions will either understand how to deal with missing data, or issue an error if they involve a type of statistical analysis that can&#39;t be used with missing data.</p>
+
+<p><strong>A note about NULL</strong>:  R also has a special &ldquo;no-value&rdquo; type called <code>NULL</code>.  Users comming from other programming languages often confuse the two (Python&#39;s None type, for example, does double duty).  By convention, you should use <code>NA</code> in data structures to represent missing data points; <code>NULL</code> should be used to refer to unassigned variables or unspecified arguments to functions.</p>
+
+<h3>Getting help</h3>
+
+<p>Manual pages for all of the functions in base R and R packages are built into the language.  To quickly get help for any function you can use the <code>?</code> syntax.  For example, to get the help page for the <code>c()</code> function we used above enter <code>?c</code>.  RStudio also has a search box on the help tab.</p>
+
+        
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/jquery-1.9.1.min.js"><\/script>')</script>
+        
+          <script src="js/highlight-7.3.min.js"></script>
+                            <script src="js/main.js"></script>
+                            <script src="js/plugins.js"></script>
+                  
+
+    </body>
+</html>

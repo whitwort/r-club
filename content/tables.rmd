@@ -72,8 +72,8 @@ codons$aminoAcid
 If we want to access a single data point we can use indexing syntax with `[]`.  When we are working with a 2D data structure, we can specific a `[row, col]`:
 
 ```{r}
-codons[1,2]
-codons[2,1]
+codons[ 1, 2 ]
+codons[ 2, 1 ]
 ````
 
 Let's explore indexing syntax in greater depth...
@@ -83,7 +83,7 @@ Let's explore indexing syntax in greater depth...
 
 Let's say we have a vector of numbers:
 ``` {r}
-myNumbers <- c(10,20,30,40,50)
+myNumbers <- c( 10, 20, 30, 40, 50 )
 ````
 
 We can extract elements from 1D vectors using the index syntax `[]` and integers:
@@ -96,7 +96,7 @@ myNumbers[3]
 Here, we've extracted elements at the position given by the integer we put inside of the `[...]`.  Remember that the `1` and `3` are actually vectors of integers (but they just have one element).  Of course this means we can also use integer vectors with more than one element inside of our index `[...]`'s.  For example:
 
 ``` {r}
-myNumbers[c(1,3)]
+myNumbers[ c(1, 3) ]
 ````
 
 You can also use the `:` operator to create a number sequence:
@@ -109,15 +109,17 @@ You can also use the `:` operator to create a number sequence:
 myNumbers[2:3]
 ````
 
-In addition to putting integer vectors inside of the index `[...]` we can also use logical vectors.  If we do `TRUE` at a position causes a value to be extracted; a `FALSE` indicates that it should be skipped.  Let's look at an example:
+In addition to putting integer vectors inside of the index `[...]` we can also use logical vectors.  If we do, `TRUE` at a position causes a value to be extracted, while a `FALSE` indicates that it should be skipped.  Let's look at an example:
 
 ``` {r}
 myNumbers
-myNumbers[c(FALSE,TRUE,TRUE,TRUE,TRUE)]
-myNumbers[c(TRUE,FALSE,FALSE,FALSE,FALSE)]
+myNumbers[ c(FALSE, TRUE , TRUE , TRUE , TRUE ) ]
+myNumbers[ c(TRUE , FALSE, FALSE, FALSE, FALSE) ]
 ````
 
-So why would you ever want to do this?  The answer comes in the combintion of this language feature with logical operators.  You can ask if values or greater `>` or less `<` than other values.  You can also ask if values of equal `==` or not equal `!=`.  Here are some examples:
+So why would you ever want to do this?  The answer lies in the combination of indexing and the logical operators (`>`, `<`, `==`, `!=`, and `%in%`).  
+
+With logical operators, you can ask if one vector of values or greater `>` or less `<` than another vector of values.  You can also ask if one vector of values is equal `==` or not equal `!=` to another.  Here are some examples:
 
 ``` {r}
 myNumbers > 25
@@ -131,9 +133,9 @@ myNumbers != 30
 !(myNumbers > 25)
 ````
 
-**NOTE:** Many beginers are confused by the difference between `=` and `==`.   The `=` operator is used for value assignment, traditionally for arguments inside of function calls such as `plot(x = 10, y = 1)`, or in newer version of R in place of the `<-` operator as in `a = 10`.  If you want to compare *equivalence* between two values you'll want to use the double `==` operator.  These operations will evaluate to a logical vector (`TRUE` or `FALSE`).
+**NOTE:** Many beginers are confused by the difference between `=` and `==`.   The `=` operator is used for value assignment, traditionally for arguments inside of function calls such as `plot(x = 10, y = 1)`, or in newer versions of R in place of the `<-` operator as in `a = 10`.  If you want to compare *equivalence* between two values you'll want to use the double `==` operator.  These operations will evaluate to a logical vector (`TRUE` or `FALSE`).
 
-So how can we combine logical comparisons with indexing?  This is a very common idiom in R:
+So how can we combine logical comparisons with indexing?  Here's an example, which is a very common idiom in R:
 
 ``` {r}
 myNumbers[myNumbers > 25]
@@ -152,9 +154,9 @@ Finally, the indexing `[...]` syntax isn't just used to extract values from data
 
 ``` {r}
 myNumbers
-myNumbers[3] <- 100
+myNumbers[3]    <- 100
 myNumbers
-myNumbers[2:3] <- c(1,2)
+myNumbers[2:3]  <- c(1,2)
 myNumbers
 ````
 
@@ -196,6 +198,8 @@ codons[ codons$aminoAcid %in% basic,    "type" ] <- "basic"
 head(codons)
 ````
 
-Pretty neat, eh?  Working with numeric data in table columns is even more straight forward.  In R, it's very easy to create new columns that are calculated from exisiting data, as you might be used to doing in Excel.  But in R, adding complex annotation columns, like `type` above, is also very simple.  Notice how we accomplished this task by composing a few minimal data structures, followed by a few relatively straight-forward assignments.  We never had to repeat assignment of any of our amino acid type.  In software engineering we always try to adhere to the "[DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself)" (don't repeat yourself) principle.  This is much easier to do when working with tabular data in R than it is in traditional spreadsheet packages or other statistical environments.
+Pretty neat, eh?  Working with numeric data in table columns is even more straight forward.  In R, it's very easy to create new columns that are calculated from exisiting data, as you might be used to doing in Excel.  In R, however, adding complex annotation columns like `type` above is also very simple.  
 
+Notice how we accomplished this task by composing a few minimal data structures, followed by a few relatively straight-forward assignments.  We never had to repeat assignment of any of our amino acid type.  In software engineering we always try to adhere to the "[DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself)" (don't repeat yourself) principle.  
 
+This is much easier to do when working with tabular data in R than it is in traditional spreadsheet packages or other statistical environments.

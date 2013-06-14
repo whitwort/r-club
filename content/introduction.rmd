@@ -1,6 +1,6 @@
 # Welcome to R!
 
-``` {r intro-example, echo=FALSE, warning=FALSE}
+``` {r echo=FALSE, warning=FALSE}
 #Example from http://had.co.nz/ggplot2/geom_histogram.html
 library(ggplot2)
 ggplot(diamonds, aes(depth, fill = cut)) + geom_density(alpha = 0.2) + xlim(55, 70)
@@ -27,11 +27,13 @@ Because the R language was designed with statistics in mind, it offers many lang
 
 ### Graphics and interactivity are baked in
 
-There are other open source high-level scripting languages that are quite popular in research science, like [Python](http://www.python.org/) and [Perl](http://www.perl.org/), that offer similar sets of advantages to R.  The recent rise in popularity of R in the biosciences and data science communities has likely been driven by a few simple usability features, that make it particularly easy to interactively explore data and easily produce publication-quality visualizations.  If you're interested in a deep analysis of the R language, including formal semantics, [this recent paper](http://www.cs.purdue.edu/homes/jv/pubs/ecoop12.pdf) offers some great insight.
+There are other open source high-level scripting languages that are quite popular in research science, like [Python](http://www.python.org/) and [Perl](http://www.perl.org/).  These programming langauges offer features which are very similar to R.  The recent rise in popularity of R among the bioscience and data science communities has likely been driven by a few simple usability features that are unique to R.  In particular, the language has been designed from the ground up to make it easy to *interactively* explore large datasets and easily produce publication-quality visualizations.  
+
+If you're interested in a deep analysis of the design of the R language, including formal semantics, [this recent paper](http://www.cs.purdue.edu/homes/jv/pubs/ecoop12.pdf) offers some interesting insights.
 
 ### Why not R?
 
-There's no getting around the fact that the learning curve for R is very steep, especially if you've never programmed or worked at a command line before.  The core R software offers no user interface in the traditional desktop sense; there are no menus or buttons to click like in Excel.  Over the 20 year history of the R language there have been several efforts to create a front end interfaces for R, discouraged by the original authors of the language.  The fact that none have ever taken hold is likely a testament to the fact that a command line is a much more powerful environment for working with data than are clicky menus.  Nonetheless, when you're used to a work flow that's menu and button driven it's hard to know where to start with a tool like R.  Hopefully, though, after you've spent some time getting familiar with the R environment you'll fall in love with the power of the command line!
+There's no getting around the fact that the learning curve for R is very steep, especially if you've never programmed or worked at a command line before.  The core R software offers no user interface in the traditional desktop sense; there are no menus or buttons to click like there are Excel.  Over the 20 year history of the R language there have been several efforts to create a front end interfaces for R, discouraged by the original authors of the language.  The fact that none have ever taken hold is likely a testament to the fact that a command line is a much more powerful environment for working with data than are clicky menus.  Nonetheless, when you're used to a work flow that's menu and button driven it's hard to know where to start with a tool like R.  Hopefully, though, after you've spent some time getting familiar with the R environment you'll fall in love with the power of the command line!
 
 [R]:  http://www.r-project.org/   "R Project homepage"
 [interpreter]:  http://en.wikipedia.org/wiki/Interpreter_(computing)

@@ -21,10 +21,8 @@ Often though, you want to perform a calculation and save the result for later us
 ```{r}
 a <- 10
 a
-
 b <- a + 11
 b
-
 c <- a / b
 c
 ````
@@ -87,7 +85,6 @@ You can create strings containing single quotes using double quotes and visa ver
 ```{r}
 s <- "My data are \"awesome\"!"
 s
-
 message(s)
 ````
 
@@ -97,7 +94,6 @@ The two other special string characters that you're likely to run across when wo
 s <- "a\tb\tc"
 s
 message(s)
-
 s <- "a\nb\nc"
 s
 message(s)

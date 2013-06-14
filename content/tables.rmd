@@ -3,117 +3,110 @@
 R has great built-in support for working with data in tabular format.  Tables in R are called "data frames".  By convention, response and annotation variables are arranged across the columns and observations down the rows.  Columns, and optionally rows, can also be given unique name.
 
 
+### A note about table structure for Excel users
 
-### blag
+Before we dive into loading and working with tabular data in R, it's worth taking a moment to consider a key difference between data formatting expectations in advanced statistical software packages like R and the bad habits most folks develop after years of working in Excel.  If you're used to working in other stats packages like SAS, SPSS or Minitab, you can skip this section.
 
-## Look at the contents of translationTable.txt
+Let's consider a simple example experimental design:  a response variable measured in two different treatment groups (A, B) over a 4 day period.  Excel has probably trained you to format the data something like this:
 
-This is a "tab-delimited" file.
+  Day | Group A | Group B
+  --- | ------- | -------
+  1   | 5       | 5
+  2   | 6       | 7
+  3   | 7       | 9
+  4   | 8       | 11
 
-You can make one in a text editor, Excel, Minitab, etc...
 
-## The read.* family of functions load tabular data into R
+The reason we have all learned to format the data this way in Excel is that it makes it easy to produce plots -- if we select these cells and click the scatter plot wizard, we'll get the desired plot with Day on the X-axis and two sets of points, one for Group A and the other Group B.
 
-``` {r}
-#Read a tab-delimited file
-translationTable <- read.delim("translationTable.txt", stringsAsFactors = FALSE)
+Statisticians, and by proxy statistical software packages, have objections to this formatting.  The problem is that we've mixed our concerns in designing the structure of our columns:  (1) *two* different columns contain values for the *same* response being measured; (2) a second variable in this design, the treatment, has to be inferred from the column headings.  What we should have is a three column table, where each column describes *one and only one* variable in the experimental design:
+
+  
+  Day | Group   | Response
+  --- | ------- | -------
+  1   | A       | 5
+  1   | B       | 5
+  2   | A       | 6
+  2   | B       | 7
+  3   | A       | 7
+  3   | B       | 9
+  4   | A       | 8
+  4   | B       | 11
+
+
+If you have a lot of data formatted in the first of these two formats, don't worry.  Restructuring your tables is easy to do in R, as is generating any new categorical label columns you might need.  We can explore this topic in more detail if there's interest, but as a preview the tools you'll probably need are the `c(..., recursive = TRUE)` and `rep()` functions.
+
+
+### Loading tabular data
+
+R can import tabular data from a wide variety of source file formats.  Base R has excellent support for loading data using the `read.table` family of functions.  There are also a wide array of R packages that support loading data from databases and other binary file formats.  If you just need to move data from an Excel worksheet into R, the easiest path is to save it as a text file (tab-delimited or csv) and load it into R using `read.table`. 
+
+If you're working in [RStudio](http://www.rstudio.com/), you can use the "Import Dataset" button on the Workspace tab to load data from a local file or over the web.  Under-the-hood RStudio is just calling `read.table` for you, which we'll explore below (see the History tab to find out what the command was).
+
+To follow along with this example, you can download this example genetic code table and save it in your current working directory:  [codons.txt](data/codons.txt).  This table has two columns:  "codon" and "aminoAcid."  To load the table into a variable:
+
+```{r echo=FALSE}
+codons <- read.table("../data/codons.txt", header = TRUE, stringsAsFactors = FALSE)
 ````
 
-What's up with the `stringsAsFactors = FALSE` part?  Factors are a more advanced topic, so we're not going to get into them today (but we *will*).  Try ommiting this argument to `read.delim` and see what happens when you run through the exercises below.  It's close to the same result.
-
-## If you have comma-separated file
-
-``` {r error=FALSE, warning=FALSE}
-myTable <- read.csv("myTable.csv")
+```{r warning=FALSE, error=FALSE}
+codons <- read.table("codons.txt", header = TRUE, stringsAsFactors = FALSE)
+head(codons)
 ````
 
-## If you need finer control over how the table is loaded
+The `read.table` function takes a large number of optional arguments which allows it to adapt to a wide variety of different file formats.  Here we've specified `header = TRUE` because the first line of our file contains column headings.  The `stringsAsFactors = FALSE` argument tells R not to try to convert text columns to a special type of data structure called a `factor`.  Factors are intended to flag strings as describing levels of a categorical variable.  They are a more advanced topic then we'll dive into here; so we'll turn them off.
 
-``` {r}
-?read.table
+
+### Accessing data in a data.frame
+
+Once your data is loaded into a data.frame (table), you can access vectors of data for individual variables in the table using the `$` syntax:
+
+```{r}
+codons$codon
+codons$aminoAcid
 ````
 
-# Tables
+If we want to access a single data point we can use indexing syntax with `[]`.  When we are working with a 2D data structure, we can specific a `[row, col]`:
 
-## It's not a number, it's not a string...
-
-``` {r}
-#Class tells you what kind of data a variable holds
-
-#So far we've seen
-class("hello")
-class(100)
-
-#We've also used TRUE as an argument for a function...
-class(TRUE)
-
-#The other logical value is FALSE
-class(FALSE)
-
-#So what's our translationTable?
-class(translationTable)
+```{r}
+codons[1,2]
+codons[2,1]
 ````
 
-## The R terminology for a table is a "data.frame"
+Let's explore indexing syntax in greater depth...
 
-How does the structure of translationTable related to our original file?
 
-  row.names |  aminoacid
-  --------- | ---------
-  GCU	      | A
-  GCC	      | A
-  GCA	      | A
+### Indexing syntax in R:  extracting & replacing values
 
-The relationship between the column headings in a data.frame the the original file can be a bit tricky to understand when you first start working with tables in R.
-
-## Two flavors of data.frame (depending on your data)
-
-* Unique values in the 1st column (row.names)
-* Non-unique values in the 1st column (no row.names)
-
-When you use one of the simple read.* functions, R will try to figure out whether or not it can treat the values in the left-most column as unique.  If it can, it will make a `data.frame` with a `row.names` column on the left side of the table.  In this case, you want the heading line of your file to have one *fewer* labels than you have columns.  See how I did this in translationTable.txt?
-
-If your left most column does **not** contain unique values, R will add a new left-hand column that just contains numbers (1..n where n is the number of rows you have).  You'll see why we want to have some kind of unique label for each row in our `data.frame` objects in a moment.
-
-# Sidebar:  Extract & Replace
-
-Remember how we mentioned that the fundamental data type in R is the vector and then I promised that this would be both hard for you to wrap your heads around at first, but also extremely powerful?  Well, prepare to have your minds blown because we're about to see our first real `vectorized` operations in R!
-
-## Let's say we have a vector of numbers:
+Let's say we have a vector of numbers:
 ``` {r}
 myNumbers <- c(10,20,30,40,50)
 ````
 
-Here's how we can `extract` a subset of vector:
+We can extract elements from 1D vectors using the index syntax `[]` and integers:
 ``` {r}
 myNumbers
 myNumbers[1]
 myNumbers[3]
 ````
 
-## What if we want more than one at once?
+Here, we've extracted elements at the position given by the integer we put inside of the `[...]`.  Remember that the `1` and `3` are actually vectors of integers (but they just have one element).  Of course this means we can also use integer vectors with more than one element inside of our index `[...]`'s.  For example:
+
 ``` {r}
-myNumbers
 myNumbers[c(1,3)]
 ````
 
-What happened there?
-
-## How can we extract a range of numbers?
+You can also use the `:` operator to create a number sequence:
 ``` {r}
 # The : operator creates a series of numbers
 1:5
 2:10
 
 # We can use this inside of our [...]
-myNumbers
 myNumbers[2:3]
 ````
 
-## We can also use logical vectors
-
-TRUE = keep it
-FALSE = don't
+In addition to putting integer vectors inside of the index `[...]` we can also use logical vectors.  If we do `TRUE` at a position causes a value to be extracted; a `FALSE` indicates that it should be skipped.  Let's look at an example:
 
 ``` {r}
 myNumbers
@@ -121,31 +114,9 @@ myNumbers[c(FALSE,TRUE,TRUE,TRUE,TRUE)]
 myNumbers[c(TRUE,FALSE,FALSE,FALSE,FALSE)]
 ````
 
-## Now things get interesting!
+So why would you ever want to do this?  The answer comes in the combintion of this language feature with logical operators.  You can ask if values or greater `>` or less `<` than other values.  You can also ask if values of equal `==` or not equal `!=`.  Here are some examples:
 
 ``` {r}
-myNumbers
-myNumbers[TRUE]
-myNumbers[c(TRUE,FALSE)]
-````
-
-## All operations in R are vectorized...
-
-Yesterday we saw that the `+` works on vectors. 
-
-Others basic math operators:
-``` {r warning=FALSE}
-myNumbers
-myNumbers + 5
-myNumbers - 5
-myNumbers * c(10,0)
-myNumbers / 0.1
-````
-
-## ...including comparison!
-
-``` {r}
-myNumbers
 myNumbers > 25
 myNumbers < 25
 
@@ -157,28 +128,25 @@ myNumbers != 30
 !(myNumbers > 25)
 ````
 
-To compare equality we use the `==` operator.  This is to prevent confusion with the `=` which is used to pass arguments to functions (or do assignment like `<-`).  This will probably trip you up at first, but you'll get used to it.  See what happens if you run `myNumbers = 30`.
+**NOTE:** Many beginers are confused by the difference between `=` and `==`.   The `=` operator is used for value assignment, traditionally for arguments inside of function calls such as `plot(x = 10, y = 1)`, or in newer version of R in place of the `<-` operator as in `a = 10`.  If you want to compare *equivalence* between two values you'll want to use the double `==` operator.  These operations will evaluate to a logical vector (`TRUE` or `FALSE`).
 
+So how can we combine logical comparisons with indexing?  This is a very common idiom in R:
 
-## So what does it all mean?
-
-We can use our extraction operators `[` `]` to filter data in our vectors.
-
-This is a very common idiom in R:
 ``` {r}
-myNumbers
 myNumbers[myNumbers > 25]
 myNumbers[myNumbers < 25]
 ````
 
-## You can get fancy...
+You can get fancy...
 
-Explore the parts of this code, then explain what it does:
 ``` {r}
-myNumbers[ (myNumbers %% 4) == 0 ]
+myNumbers[ (myNumbers %% 2) == 0 ]
 ````
 
-## You can use [] to replace data too!
+What happened there?  If you need help figuring it out, look up the `%%` (*modulo*) operator on the help panel.
+
+Finally, the indexing `[...]` syntax isn't just used to extract values from data structures.  It can also be used to assign values *into* existing structures.  For example:
+
 ``` {r}
 myNumbers
 myNumbers[3] <- 100
@@ -187,86 +155,44 @@ myNumbers[2:3] <- c(1,2)
 myNumbers
 ````
 
-# Back to our table
+Now, back to our table...
 
-## The [] operators work with data.frames as well
 
-``` {r}
-# You can subset tables on a column: table[col]
-## translationTable[1]
+### Calculating a new column
 
-# You can subset tables on both a row and a column
-translationTable[3,1]
+We can use the `$` syntax (like the `[...]`) to assign data to existing columns on a `data.frame` or to create a new column.  Let's say that we want to add a new column to our `codons` table that will annotate what type of amino acid is encoded by each codon (non-polar, polar, acidic or basic).
 
-#If you leave out the column, but keep the , you'll get all columns
-translationTable[3,]
+We can start by creating a new column called `type` that contains all `NA` values:
+
+```{r}
+codons$type <- NA
+head(codons)
 ````
 
-## You can use text to refer to columns or rows by name
+Here could have hand-encoded a vector of 20 strings describing the type of each amino acid in our table.  But we'll be lazy and learn a few new R tricks here instead.  Let's make some vectors that just describe which amino acids belong to each of the four categories:
 
-Only works for rows if your `data.frame` has unique `row.name`'s
+```{r}
+# Assuming physiological pH; we'll call H basically basic for simplicity
+nonpolar  <- c( "A", "C", "G", "I", "L", "M", "F", "P", "W", "V" )
+polar     <- c( "N", "Q", "S", "T", "Y"                          )
+acidic    <- c( "D", "E"                                         )
+basic     <- c( "R", "H", "K"                                    )
 
-``` {r}
-translationTable["GUC","aminoacid"]
-translationTable["GUC",]
-
-#Oh hey!  Remember vectors?
-translationTable[c("GUA","UAG"),]
-
-#... and logicals?
-translationTable[c(TRUE,FALSE),]
+# We can make sure we've annotated all 20 amino acids
+length( c( nonpolar, polar, acidic, basic ) ) == 20
 ````
 
-## A couple other tricks...
-``` {r}
-#If your table has row names, you can get a vector of them with:
-row.names(translationTable)
+Now we can update our `type` column using the annotations that we've saved in these variables.  The logical `%in%` operator tests whether or not one vector of values (left side) is found in another (right side).  It returns a vector of boolean values of the same length as the left-hand test vector.  So we can do this:
 
-#The $ is a short hand notation for selecting a column of data from a table
-translationTable$aminoacid
+```{r}
+codons[ codons$aminoAcid %in% nonpolar, "type" ] <- "nonpolar"
+codons[ codons$aminoAcid %in% polar,    "type" ] <- "polar"
+codons[ codons$aminoAcid %in% acidic,   "type" ] <- "acidic"
+codons[ codons$aminoAcid %in% basic,    "type" ] <- "basic"
+
+head(codons)
 ````
 
-## Your turn #1
+Pretty neat, eh?  Working with numeric data in table columns is even more straight forward.  In R, it's very easy to create new columns that are calculated from exisiting data, as you might be used to doing in Excel.  But in R, adding complex annotation columns, like `type` above, is also very simple.  Notice how we accomplished this task by composing a few minimal data structures, followed by a few relatively straight-forward assignments.  We never had to repeat assignment of any of our amino acid type.  In software engineering we always try to adhere to the "[DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself)" (don't repeat yourself) principle.  This is much easier to do when working with tabular data in R than it is in traditional spreadsheet packages or other statistical environments.
 
-Subset the table to return a vector of all of the codons which encode valine
-"V"
 
-## Your turn #2
-
-Write a function that takes a RNA codon and returns the amino acid.
-
-``` {r}
-translateRNA <- function(codon) {
-
-  #Insert your code here
-
-}
-````
-
-``` {r include=FALSE}
-translateRNA <- function(codon) {
-  translationTable[codon,]
-}
-````
-
-Make sure it works:
-``` {r}
-translateRNA("UAU")
-````
-
-How might this function be useful in a script designed to translate dna.txt?
-
-For a full reference on extraction and replacement operators in R, you can search for "[" in the Rstudio search box, or run `help("[")` at the prompt.
-
-# Subsetting strings
-
-## We're getting close!  
-
-We can translate codons...
-``` {r}
-translateRNA("UGG")
-````
-...but we need to be able to read a string of letters in sets of 3.
-``` {r}
-sampleRNA <- "GTAGCTGGCAAGTTAATAGAGATGGAAAAC"
-````

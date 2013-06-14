@@ -57,6 +57,10 @@ input::-moz-focus-inner {
     border-bottom: 1px solid #CCC
 }
 
+.pageView h1, h2, h3, h4, h5, h6 {
+  padding-top: 1em;
+}
+
 .pageView section h1 {
   font-size: 32px;
   line-height: 44px;

@@ -37,129 +37,176 @@
 
 <p>R has great built-in support for working with data in tabular format.  Tables in R are called &ldquo;data frames&rdquo;.  By convention, response and annotation variables are arranged across the columns and observations down the rows.  Columns, and optionally rows, can also be given unique name.</p>
 
-<h3>blag</h3>
+<h3>A note about table structure for Excel users</h3>
 
-<h2>Look at the contents of translationTable.txt</h2>
+<p>Before we dive into loading and working with tabular data in R, it&#39;s worth taking a moment to consider a key difference between data formatting expectations in advanced statistical software packages like R and the bad habits most folks develop after years of working in Excel.  If you&#39;re used to working in other stats packages like SAS, SPSS or Minitab, you can skip this section.</p>
 
-<p>This is a &ldquo;tab-delimited&rdquo; file.</p>
+<p>Let&#39;s consider a simple example experimental design:  a response variable measured in two different treatment groups (A, B) over a 4 day period.  Excel has probably trained you to format the data something like this:</p>
 
-<p>You can make one in a text editor, Excel, Minitab, etc&hellip;</p>
+<table><thead>
+<tr>
+<th>Day</th>
+<th>Group A</th>
+<th>Group B</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>7</td>
+<td>9</td>
+</tr>
+<tr>
+<td>4</td>
+<td>8</td>
+<td>11</td>
+</tr>
+</tbody></table>
 
-<h2>The read.* family of functions load tabular data into R</h2>
+<p>The reason we have all learned to format the data this way in Excel is that it makes it easy to produce plots &ndash; if we select these cells and click the scatter plot wizard, we&#39;ll get the desired plot with Day on the X-axis and two sets of points, one for Group A and the other Group B.</p>
 
-<pre><code class="r">#Read a tab-delimited file
-translationTable &lt;- read.delim(&quot;translationTable.txt&quot;, stringsAsFactors = FALSE)
-</code></pre>
+<p>Statisticians, and by proxy statistical software packages, have objections to this formatting.  The problem is that we&#39;ve mixed our concerns in designing the structure of our columns:  (1) <em>two</em> different columns contain values for the <em>same</em> response being measured; (2) a second variable in this design, the treatment, has to be inferred from the column headings.  What we should have is a three column table, where each column describes <em>one and only one</em> variable in the experimental design:</p>
 
-<pre><code>Warning: cannot open file &#39;translationTable.txt&#39;: No such file or
-directory
+<table><thead>
+<tr>
+<th>Day</th>
+<th>Group</th>
+<th>Response</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>A</td>
+<td>5</td>
+</tr>
+<tr>
+<td>1</td>
+<td>B</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A</td>
+<td>6</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B</td>
+<td>7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>A</td>
+<td>7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>B</td>
+<td>9</td>
+</tr>
+<tr>
+<td>4</td>
+<td>A</td>
+<td>8</td>
+</tr>
+<tr>
+<td>4</td>
+<td>B</td>
+<td>11</td>
+</tr>
+</tbody></table>
+
+<p>If you have a lot of data formatted in the first of these two formats, don&#39;t worry.  Restructuring your tables is easy to do in R, as is generating any new categorical label columns you might need.  We can explore this topic in more detail if there&#39;s interest, but as a preview the tools you&#39;ll probably need are the <code>c(..., recursive = TRUE)</code> and <code>rep()</code> functions.</p>
+
+<h3>Loading tabular data</h3>
+
+<p>R can import tabular data from a wide variety of source file formats.  Base R has excellent support for loading data using the <code>read.table</code> family of functions.  There are also a wide array of R packages that support loading data from databases and other binary file formats.  If you just need to move data from an Excel worksheet into R, the easiest path is to save it as a text file (tab-delimited or csv) and load it into R using <code>read.table</code>. </p>
+
+<p>If you&#39;re working in <a href="http://www.rstudio.com/">RStudio</a>, you can use the &ldquo;Import Dataset&rdquo; button on the Workspace tab to load data from a local file or over the web.  Under-the-hood RStudio is just calling <code>read.table</code> for you, which we&#39;ll explore below (see the History tab to find out what the command was).</p>
+
+<p>To follow along with this example, you can download this example genetic code table and save it in your current working directory:  <a href="data/codons.txt">codons.txt</a>.  This table has two columns:  &ldquo;codon&rdquo; and &ldquo;aminoAcid.&rdquo;  To load the table into a variable:</p>
+
+<pre><code>Warning: cannot open file &#39;../data/codons.txt&#39;: No such file or directory
 </code></pre>
 
 <pre><code>Error: cannot open the connection
 </code></pre>
 
-<p>What&#39;s up with the <code>stringsAsFactors = FALSE</code> part?  Factors are a more advanced topic, so we&#39;re not going to get into them today (but we <em>will</em>).  Try ommiting this argument to <code>read.delim</code> and see what happens when you run through the exercises below.  It&#39;s close to the same result.</p>
-
-<h2>If you have comma-separated file</h2>
-
-<pre><code class="r">myTable &lt;- read.csv(&quot;myTable.csv&quot;)
+<pre><code class="r">codons &lt;- read.table(&quot;codons.txt&quot;, header = TRUE, stringsAsFactors = FALSE)
+head(codons)
 </code></pre>
 
-<h2>If you need finer control over how the table is loaded</h2>
-
-<pre><code class="r">?read.table
+<pre><code>  codon aminoAcid type
+1   GCU         A &lt;NA&gt;
+2   GCC         A &lt;NA&gt;
+3   GCA         A &lt;NA&gt;
+4   GCG         A &lt;NA&gt;
+5   CGU         R &lt;NA&gt;
+6   CGC         R &lt;NA&gt;
 </code></pre>
 
-<h1>Tables</h1>
+<p>The <code>read.table</code> function takes a large number of optional arguments which allows it to adapt to a wide variety of different file formats.  Here we&#39;ve specified <code>header = TRUE</code> because the first line of our file contains column headings.  The <code>stringsAsFactors = FALSE</code> argument tells R not to try to convert text columns to a special type of data structure called a <code>factor</code>.  Factors are intended to flag strings as describing levels of a categorical variable.  They are a more advanced topic then we&#39;ll dive into here; so we&#39;ll turn them off.</p>
 
-<h2>It&#39;s not a number, it&#39;s not a string&hellip;</h2>
+<h3>Accessing data in a data.frame</h3>
 
-<pre><code class="r">#Class tells you what kind of data a variable holds
+<p>Once your data is loaded into a data.frame (table), you can access vectors of data for individual variables in the table using the <code>$</code> syntax:</p>
 
-#So far we&#39;ve seen
-class(&quot;hello&quot;)
+<pre><code class="r">codons$codon
 </code></pre>
 
-<pre><code>[1] &quot;character&quot;
+<pre><code> [1] &quot;GCU&quot; &quot;GCC&quot; &quot;GCA&quot; &quot;GCG&quot; &quot;CGU&quot; &quot;CGC&quot; &quot;CGA&quot; &quot;CGG&quot; &quot;AGA&quot; &quot;AGG&quot; &quot;AAU&quot;
+[12] &quot;AAC&quot; &quot;GAU&quot; &quot;GAC&quot; &quot;UGU&quot; &quot;UGC&quot; &quot;CAA&quot; &quot;CAG&quot; &quot;GAA&quot; &quot;GAG&quot; &quot;GGU&quot; &quot;GGC&quot;
+[23] &quot;GGA&quot; &quot;GGG&quot; &quot;CAU&quot; &quot;CAC&quot; &quot;AUU&quot; &quot;AUC&quot; &quot;AUA&quot; &quot;AUG&quot; &quot;UUA&quot; &quot;UUG&quot; &quot;CUU&quot;
+[34] &quot;CUC&quot; &quot;CUA&quot; &quot;CUG&quot; &quot;AAA&quot; &quot;AAG&quot; &quot;UUU&quot; &quot;UUC&quot; &quot;CCU&quot; &quot;CCC&quot; &quot;CCA&quot; &quot;CCG&quot;
+[45] &quot;UCU&quot; &quot;UCC&quot; &quot;UCA&quot; &quot;UCG&quot; &quot;AGU&quot; &quot;AGC&quot; &quot;ACU&quot; &quot;ACC&quot; &quot;ACA&quot; &quot;ACG&quot; &quot;UGG&quot;
+[56] &quot;UAU&quot; &quot;UAC&quot; &quot;GUU&quot; &quot;GUC&quot; &quot;GUA&quot; &quot;GUG&quot; &quot;UAA&quot; &quot;UGA&quot; &quot;UAG&quot;
 </code></pre>
 
-<pre><code class="r">class(100)
+<pre><code class="r">codons$aminoAcid
 </code></pre>
 
-<pre><code>[1] &quot;numeric&quot;
+<pre><code> [1] &quot;A&quot;    &quot;A&quot;    &quot;A&quot;    &quot;A&quot;    &quot;R&quot;    &quot;R&quot;    &quot;R&quot;    &quot;R&quot;    &quot;R&quot;    &quot;R&quot;   
+[11] &quot;N&quot;    &quot;N&quot;    &quot;D&quot;    &quot;D&quot;    &quot;C&quot;    &quot;C&quot;    &quot;Q&quot;    &quot;Q&quot;    &quot;E&quot;    &quot;E&quot;   
+[21] &quot;G&quot;    &quot;G&quot;    &quot;G&quot;    &quot;G&quot;    &quot;H&quot;    &quot;H&quot;    &quot;I&quot;    &quot;I&quot;    &quot;I&quot;    &quot;M&quot;   
+[31] &quot;L&quot;    &quot;L&quot;    &quot;L&quot;    &quot;L&quot;    &quot;L&quot;    &quot;L&quot;    &quot;K&quot;    &quot;K&quot;    &quot;F&quot;    &quot;F&quot;   
+[41] &quot;P&quot;    &quot;P&quot;    &quot;P&quot;    &quot;P&quot;    &quot;S&quot;    &quot;S&quot;    &quot;S&quot;    &quot;S&quot;    &quot;S&quot;    &quot;S&quot;   
+[51] &quot;T&quot;    &quot;T&quot;    &quot;T&quot;    &quot;T&quot;    &quot;W&quot;    &quot;Y&quot;    &quot;Y&quot;    &quot;V&quot;    &quot;V&quot;    &quot;V&quot;   
+[61] &quot;V&quot;    &quot;STOP&quot; &quot;STOP&quot; &quot;STOP&quot;
 </code></pre>
 
-<pre><code class="r">
-#We&#39;ve also used TRUE as an argument for a function...
-class(TRUE)
+<p>If we want to access a single data point we can use indexing syntax with <code>[]</code>.  When we are working with a 2D data structure, we can specific a <code>[row, col]</code>:</p>
+
+<pre><code class="r">codons[1,2]
 </code></pre>
 
-<pre><code>[1] &quot;logical&quot;
+<pre><code>[1] &quot;A&quot;
 </code></pre>
 
-<pre><code class="r">
-#The other logical value is FALSE
-class(FALSE)
+<pre><code class="r">codons[2,1]
 </code></pre>
 
-<pre><code>[1] &quot;logical&quot;
+<pre><code>[1] &quot;GCC&quot;
 </code></pre>
 
-<pre><code class="r">
-#So what&#39;s our translationTable?
-class(translationTable)
-</code></pre>
+<p>Let&#39;s explore indexing syntax in greater depth&hellip;</p>
 
-<pre><code>Error: object &#39;translationTable&#39; not found
-</code></pre>
+<h3>Indexing syntax in R:  extracting &amp; replacing values</h3>
 
-<h2>The R terminology for a table is a &ldquo;data.frame&rdquo;</h2>
-
-<p>How does the structure of translationTable related to our original file?</p>
-
-<table><thead>
-<tr>
-<th>row.names</th>
-<th>aminoacid</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>GCU</td>
-<td>A</td>
-</tr>
-<tr>
-<td>GCC</td>
-<td>A</td>
-</tr>
-<tr>
-<td>GCA</td>
-<td>A</td>
-</tr>
-</tbody></table>
-
-<p>The relationship between the column headings in a data.frame the the original file can be a bit tricky to understand when you first start working with tables in R.</p>
-
-<h2>Two flavors of data.frame (depending on your data)</h2>
-
-<ul>
-<li>Unique values in the 1st column (row.names)</li>
-<li>Non-unique values in the 1st column (no row.names)</li>
-</ul>
-
-<p>When you use one of the simple read.* functions, R will try to figure out whether or not it can treat the values in the left-most column as unique.  If it can, it will make a <code>data.frame</code> with a <code>row.names</code> column on the left side of the table.  In this case, you want the heading line of your file to have one <em>fewer</em> labels than you have columns.  See how I did this in translationTable.txt?</p>
-
-<p>If your left most column does <strong>not</strong> contain unique values, R will add a new left-hand column that just contains numbers (1..n where n is the number of rows you have).  You&#39;ll see why we want to have some kind of unique label for each row in our <code>data.frame</code> objects in a moment.</p>
-
-<h1>Sidebar:  Extract &amp; Replace</h1>
-
-<p>Remember how we mentioned that the fundamental data type in R is the vector and then I promised that this would be both hard for you to wrap your heads around at first, but also extremely powerful?  Well, prepare to have your minds blown because we&#39;re about to see our first real <code>vectorized</code> operations in R!</p>
-
-<h2>Let&#39;s say we have a vector of numbers:</h2>
+<p>Let&#39;s say we have a vector of numbers:</p>
 
 <pre><code class="r">myNumbers &lt;- c(10,20,30,40,50)
 </code></pre>
 
-<p>Here&#39;s how we can <code>extract</code> a subset of vector:</p>
+<p>We can extract elements from 1D vectors using the index syntax <code>[]</code> and integers:</p>
 
 <pre><code class="r">myNumbers
 </code></pre>
@@ -179,13 +226,7 @@ class(translationTable)
 <pre><code>[1] 30
 </code></pre>
 
-<h2>What if we want more than one at once?</h2>
-
-<pre><code class="r">myNumbers
-</code></pre>
-
-<pre><code>[1] 10 20 30 40 50
-</code></pre>
+<p>Here, we&#39;ve extracted elements at the position given by the integer we put inside of the <code>[...]</code>.  Remember that the <code>1</code> and <code>3</code> are actually vectors of integers (but they just have one element).  Of course this means we can also use integer vectors with more than one element inside of our index <code>[...]</code>&#39;s.  For example:</p>
 
 <pre><code class="r">myNumbers[c(1,3)]
 </code></pre>
@@ -193,9 +234,7 @@ class(translationTable)
 <pre><code>[1] 10 30
 </code></pre>
 
-<p>What happened there?</p>
-
-<h2>How can we extract a range of numbers?</h2>
+<p>You can also use the <code>:</code> operator to create a number sequence:</p>
 
 <pre><code class="r"># The : operator creates a series of numbers
 1:5
@@ -212,22 +251,13 @@ class(translationTable)
 
 <pre><code class="r">
 # We can use this inside of our [...]
-myNumbers
-</code></pre>
-
-<pre><code>[1] 10 20 30 40 50
-</code></pre>
-
-<pre><code class="r">myNumbers[2:3]
+myNumbers[2:3]
 </code></pre>
 
 <pre><code>[1] 20 30
 </code></pre>
 
-<h2>We can also use logical vectors</h2>
-
-<p>TRUE = keep it
-FALSE = don&#39;t</p>
+<p>In addition to putting integer vectors inside of the index <code>[...]</code> we can also use logical vectors.  If we do <code>TRUE</code> at a position causes a value to be extracted; a <code>FALSE</code> indicates that it should be skipped.  Let&#39;s look at an example:</p>
 
 <pre><code class="r">myNumbers
 </code></pre>
@@ -247,69 +277,7 @@ FALSE = don&#39;t</p>
 <pre><code>[1] 10
 </code></pre>
 
-<h2>Now things get interesting!</h2>
-
-<pre><code class="r">myNumbers
-</code></pre>
-
-<pre><code>[1] 10 20 30 40 50
-</code></pre>
-
-<pre><code class="r">myNumbers[TRUE]
-</code></pre>
-
-<pre><code>[1] 10 20 30 40 50
-</code></pre>
-
-<pre><code class="r">myNumbers[c(TRUE,FALSE)]
-</code></pre>
-
-<pre><code>[1] 10 30 50
-</code></pre>
-
-<h2>All operations in R are vectorized&hellip;</h2>
-
-<p>Yesterday we saw that the <code>+</code> works on vectors. </p>
-
-<p>Others basic math operators:</p>
-
-<pre><code class="r">myNumbers
-</code></pre>
-
-<pre><code>[1] 10 20 30 40 50
-</code></pre>
-
-<pre><code class="r">myNumbers + 5
-</code></pre>
-
-<pre><code>[1] 15 25 35 45 55
-</code></pre>
-
-<pre><code class="r">myNumbers - 5
-</code></pre>
-
-<pre><code>[1]  5 15 25 35 45
-</code></pre>
-
-<pre><code class="r">myNumbers * c(10,0)
-</code></pre>
-
-<pre><code>[1] 100   0 300   0 500
-</code></pre>
-
-<pre><code class="r">myNumbers / 0.1
-</code></pre>
-
-<pre><code>[1] 100 200 300 400 500
-</code></pre>
-
-<h2>&hellip;including comparison!</h2>
-
-<pre><code class="r">myNumbers
-</code></pre>
-
-<pre><code>[1] 10 20 30 40 50
-</code></pre>
+<p>So why would you ever want to do this?  The answer comes in the combintion of this language feature with logical operators.  You can ask if values or greater <code>&gt;</code> or less <code>&lt;</code> than other values.  You can also ask if values of equal <code>==</code> or not equal <code>!=</code>.  Here are some examples:</p>
 
 <pre><code class="r">myNumbers &gt; 25
 </code></pre>
@@ -345,19 +313,9 @@ myNumbers != 30
 <pre><code>[1]  TRUE  TRUE FALSE FALSE FALSE
 </code></pre>
 
-<p>To compare equality we use the <code>==</code> operator.  This is to prevent confusion with the <code>=</code> which is used to pass arguments to functions (or do assignment like <code>&lt;-</code>).  This will probably trip you up at first, but you&#39;ll get used to it.  See what happens if you run <code>myNumbers = 30</code>.</p>
+<p><strong>NOTE:</strong> Many beginers are confused by the difference between <code>=</code> and <code>==</code>.   The <code>=</code> operator is used for value assignment, traditionally for arguments inside of function calls such as <code>plot(x = 10, y = 1)</code>, or in newer version of R in place of the <code>&lt;-</code> operator as in <code>a = 10</code>.  If you want to compare <em>equivalence</em> between two values you&#39;ll want to use the double <code>==</code> operator.  These operations will evaluate to a logical vector (<code>TRUE</code> or <code>FALSE</code>).</p>
 
-<h2>So what does it all mean?</h2>
-
-<p>We can use our extraction operators <code>[</code> <code>]</code> to filter data in our vectors.</p>
-
-<p>This is a very common idiom in R:</p>
-
-<pre><code class="r">myNumbers
-</code></pre>
-
-<pre><code>[1] 10 20 30 40 50
-</code></pre>
+<p>So how can we combine logical comparisons with indexing?  This is a very common idiom in R:</p>
 
 <pre><code class="r">myNumbers[myNumbers &gt; 25]
 </code></pre>
@@ -371,17 +329,17 @@ myNumbers != 30
 <pre><code>[1] 10 20
 </code></pre>
 
-<h2>You can get fancy&hellip;</h2>
+<p>You can get fancy&hellip;</p>
 
-<p>Explore the parts of this code, then explain what it does:</p>
-
-<pre><code class="r">myNumbers[ (myNumbers %% 4) == 0 ]
+<pre><code class="r">myNumbers[ (myNumbers %% 2) == 0 ]
 </code></pre>
 
-<pre><code>[1] 20 40
+<pre><code>[1] 10 20 30 40 50
 </code></pre>
 
-<h2>You can use [] to replace data too!</h2>
+<p>What happened there?  If you need help figuring it out, look up the <code>%%</code> (<em>modulo</em>) operator on the help panel.</p>
+
+<p>Finally, the indexing <code>[...]</code> syntax isn&#39;t just used to extract values from data structures.  It can also be used to assign values <em>into</em> existing structures.  For example:</p>
 
 <pre><code class="r">myNumbers
 </code></pre>
@@ -403,121 +361,62 @@ myNumbers
 <pre><code>[1] 10  1  2 40 50
 </code></pre>
 
-<h1>Back to our table</h1>
+<p>Now, back to our table&hellip;</p>
 
-<h2>The [] operators work with data.frames as well</h2>
+<h3>Calculating a new column</h3>
 
-<pre><code class="r"># You can subset tables on a column: table[col]
-## translationTable[1]
+<p>We can use the <code>$</code> syntax (like the <code>[...]</code>) to assign data to existing columns on a <code>data.frame</code> or to create a new column.  Let&#39;s say that we want to add a new column to our <code>codons</code> table that will annotate what type of amino acid is encoded by each codon (non-polar, polar, acidic or basic).</p>
 
-# You can subset tables on both a row and a column
-translationTable[3,1]
+<p>We can start by creating a new column called <code>type</code> that contains all <code>NA</code> values:</p>
+
+<pre><code class="r">codons$type &lt;- NA
+head(codons)
 </code></pre>
 
-<pre><code>Error: object &#39;translationTable&#39; not found
+<pre><code>  codon aminoAcid type
+1   GCU         A   NA
+2   GCC         A   NA
+3   GCA         A   NA
+4   GCG         A   NA
+5   CGU         R   NA
+6   CGC         R   NA
 </code></pre>
 
-<pre><code class="r">
-#If you leave out the column, but keep the , you&#39;ll get all columns
-translationTable[3,]
+<p>Here could have hand-encoded a vector of 20 strings describing the type of each amino acid in our table.  But we&#39;ll be lazy and learn a few new R tricks here instead.  Let&#39;s make some vectors that just describe which amino acids belong to each of the four categories:</p>
+
+<pre><code class="r"># Assuming physiological pH; we&#39;ll call H basically basic for simplicity
+nonpolar  &lt;- c( &quot;A&quot;, &quot;C&quot;, &quot;G&quot;, &quot;I&quot;, &quot;L&quot;, &quot;M&quot;, &quot;F&quot;, &quot;P&quot;, &quot;W&quot;, &quot;V&quot; )
+polar     &lt;- c( &quot;N&quot;, &quot;Q&quot;, &quot;S&quot;, &quot;T&quot;, &quot;Y&quot;                          )
+acidic    &lt;- c( &quot;D&quot;, &quot;E&quot;                                         )
+basic     &lt;- c( &quot;R&quot;, &quot;H&quot;, &quot;K&quot;                                    )
+
+# We can make sure we&#39;ve annotated all 20 amino acids
+length( c( nonpolar, polar, acidic, basic ) ) == 20
 </code></pre>
 
-<pre><code>Error: object &#39;translationTable&#39; not found
+<pre><code>[1] TRUE
 </code></pre>
 
-<h2>You can use text to refer to columns or rows by name</h2>
+<p>Now we can update our <code>type</code> column using the annotations that we&#39;ve saved in these variables.  The logical <code>%in%</code> operator tests whether or not one vector of values (left side) is found in another (right side).  It returns a vector of boolean values of the same length as the left-hand test vector.  So we can do this:</p>
 
-<p>Only works for rows if your <code>data.frame</code> has unique <code>row.name</code>&#39;s</p>
+<pre><code class="r">codons[ codons$aminoAcid %in% nonpolar, &quot;type&quot; ] &lt;- &quot;nonpolar&quot;
+codons[ codons$aminoAcid %in% polar,    &quot;type&quot; ] &lt;- &quot;polar&quot;
+codons[ codons$aminoAcid %in% acidic,   &quot;type&quot; ] &lt;- &quot;acidic&quot;
+codons[ codons$aminoAcid %in% basic,    &quot;type&quot; ] &lt;- &quot;basic&quot;
 
-<pre><code class="r">translationTable[&quot;GUC&quot;,&quot;aminoacid&quot;]
+head(codons)
 </code></pre>
 
-<pre><code>Error: object &#39;translationTable&#39; not found
+<pre><code>  codon aminoAcid     type
+1   GCU         A nonpolar
+2   GCC         A nonpolar
+3   GCA         A nonpolar
+4   GCG         A nonpolar
+5   CGU         R    basic
+6   CGC         R    basic
 </code></pre>
 
-<pre><code class="r">translationTable[&quot;GUC&quot;,]
-</code></pre>
-
-<pre><code>Error: object &#39;translationTable&#39; not found
-</code></pre>
-
-<pre><code class="r">
-#Oh hey!  Remember vectors?
-translationTable[c(&quot;GUA&quot;,&quot;UAG&quot;),]
-</code></pre>
-
-<pre><code>Error: object &#39;translationTable&#39; not found
-</code></pre>
-
-<pre><code class="r">
-#... and logicals?
-translationTable[c(TRUE,FALSE),]
-</code></pre>
-
-<pre><code>Error: object &#39;translationTable&#39; not found
-</code></pre>
-
-<h2>A couple other tricks&hellip;</h2>
-
-<pre><code class="r">#If your table has row names, you can get a vector of them with:
-row.names(translationTable)
-</code></pre>
-
-<pre><code>Error: object &#39;translationTable&#39; not found
-</code></pre>
-
-<pre><code class="r">
-#The $ is a short hand notation for selecting a column of data from a table
-translationTable$aminoacid
-</code></pre>
-
-<pre><code>Error: object &#39;translationTable&#39; not found
-</code></pre>
-
-<h2>Your turn #1</h2>
-
-<p>Subset the table to return a vector of all of the codons which encode valine
-&ldquo;V&rdquo;</p>
-
-<h2>Your turn #2</h2>
-
-<p>Write a function that takes a RNA codon and returns the amino acid.</p>
-
-<pre><code class="r">translateRNA &lt;- function(codon) {
-
-  #Insert your code here
-
-}
-</code></pre>
-
-<p>Make sure it works:</p>
-
-<pre><code class="r">translateRNA(&quot;UAU&quot;)
-</code></pre>
-
-<pre><code>Error: object &#39;translationTable&#39; not found
-</code></pre>
-
-<p>How might this function be useful in a script designed to translate dna.txt?</p>
-
-<p>For a full reference on extraction and replacement operators in R, you can search for &ldquo;[&rdquo; in the Rstudio search box, or run <code>help(&quot;[&quot;)</code> at the prompt.</p>
-
-<h1>Subsetting strings</h1>
-
-<h2>We&#39;re getting close!</h2>
-
-<p>We can translate codons&hellip;</p>
-
-<pre><code class="r">translateRNA(&quot;UGG&quot;)
-</code></pre>
-
-<pre><code>Error: object &#39;translationTable&#39; not found
-</code></pre>
-
-<p>&hellip;but we need to be able to read a string of letters in sets of 3.</p>
-
-<pre><code class="r">sampleRNA &lt;- &quot;GTAGCTGGCAAGTTAATAGAGATGGAAAAC&quot;
-</code></pre>
+<p>Pretty neat, eh?  Working with numeric data in table columns is even more straight forward.  In R, it&#39;s very easy to create new columns that are calculated from exisiting data, as you might be used to doing in Excel.  But in R, adding complex annotation columns, like <code>type</code> above, is also very simple.  Notice how we accomplished this task by composing a few minimal data structures, followed by a few relatively straight-forward assignments.  We never had to repeat assignment of any of our amino acid type.  In software engineering we always try to adhere to the &ldquo;<a href="http://en.wikipedia.org/wiki/Don&#x27;t_repeat_yourself">DRY</a>&rdquo; (don&#39;t repeat yourself) principle.  This is much easier to do when working with tabular data in R than it is in traditional spreadsheet packages or other statistical environments.</p>
 
         
         </div>

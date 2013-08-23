@@ -182,13 +182,13 @@ head(codons)
 
 <p>If we want to access a single data point we can use indexing syntax with <code>[]</code>.  When we are working with a 2D data structure, we can specific a <code>[row, col]</code>:</p>
 
-<pre><code class="r">codons[1,2]
+<pre><code class="r">codons[ 1, 2 ]
 </code></pre>
 
 <pre><code>[1] &quot;A&quot;
 </code></pre>
 
-<pre><code class="r">codons[2,1]
+<pre><code class="r">codons[ 2, 1 ]
 </code></pre>
 
 <pre><code>[1] &quot;GCC&quot;
@@ -200,7 +200,7 @@ head(codons)
 
 <p>Let&#39;s say we have a vector of numbers:</p>
 
-<pre><code class="r">myNumbers &lt;- c(10,20,30,40,50)
+<pre><code class="r">myNumbers &lt;- c( 10, 20, 30, 40, 50 )
 </code></pre>
 
 <p>We can extract elements from 1D vectors using the index syntax <code>[]</code> and integers:</p>
@@ -225,7 +225,7 @@ head(codons)
 
 <p>Here, we&#39;ve extracted elements at the position given by the integer we put inside of the <code>[...]</code>.  Remember that the <code>1</code> and <code>3</code> are actually vectors of integers (but they just have one element).  Of course this means we can also use integer vectors with more than one element inside of our index <code>[...]</code>&#39;s.  For example:</p>
 
-<pre><code class="r">myNumbers[c(1,3)]
+<pre><code class="r">myNumbers[ c(1, 3) ]
 </code></pre>
 
 <pre><code>[1] 10 30
@@ -254,7 +254,7 @@ myNumbers[2:3]
 <pre><code>[1] 20 30
 </code></pre>
 
-<p>In addition to putting integer vectors inside of the index <code>[...]</code> we can also use logical vectors.  If we do <code>TRUE</code> at a position causes a value to be extracted; a <code>FALSE</code> indicates that it should be skipped.  Let&#39;s look at an example:</p>
+<p>In addition to putting integer vectors inside of the index <code>[...]</code> we can also use logical vectors.  If we do, <code>TRUE</code> at a position causes a value to be extracted, while a <code>FALSE</code> indicates that it should be skipped.  Let&#39;s look at an example:</p>
 
 <pre><code class="r">myNumbers
 </code></pre>
@@ -262,19 +262,21 @@ myNumbers[2:3]
 <pre><code>[1] 10 20 30 40 50
 </code></pre>
 
-<pre><code class="r">myNumbers[c(FALSE,TRUE,TRUE,TRUE,TRUE)]
+<pre><code class="r">myNumbers[ c(FALSE, TRUE , TRUE , TRUE , TRUE ) ]
 </code></pre>
 
 <pre><code>[1] 20 30 40 50
 </code></pre>
 
-<pre><code class="r">myNumbers[c(TRUE,FALSE,FALSE,FALSE,FALSE)]
+<pre><code class="r">myNumbers[ c(TRUE , FALSE, FALSE, FALSE, FALSE) ]
 </code></pre>
 
 <pre><code>[1] 10
 </code></pre>
 
-<p>So why would you ever want to do this?  The answer comes in the combintion of this language feature with logical operators.  You can ask if values or greater <code>&gt;</code> or less <code>&lt;</code> than other values.  You can also ask if values of equal <code>==</code> or not equal <code>!=</code>.  Here are some examples:</p>
+<p>So why would you ever want to do this?  The answer lies in the combination of indexing and the logical operators (<code>&gt;</code>, <code>&lt;</code>, <code>==</code>, <code>!=</code>, and <code>%in%</code>).  </p>
+
+<p>With logical operators, you can ask if one vector of values or greater <code>&gt;</code> or less <code>&lt;</code> than another vector of values.  You can also ask if one vector of values is equal <code>==</code> or not equal <code>!=</code> to another.  Here are some examples:</p>
 
 <pre><code class="r">myNumbers &gt; 25
 </code></pre>
@@ -288,16 +290,14 @@ myNumbers[2:3]
 <pre><code>[1]  TRUE  TRUE FALSE FALSE FALSE
 </code></pre>
 
-<pre><code class="r">
-#Equality comparison uses == instead of =
+<pre><code class="r">#Equality comparison uses == instead of =
 myNumbers == 30
 </code></pre>
 
 <pre><code>[1] FALSE FALSE  TRUE FALSE FALSE
 </code></pre>
 
-<pre><code class="r">
-# The `!` operator negates logical vectors (&quot;not&quot;)
+<pre><code class="r"># The `!` operator negates logical vectors (&quot;not&quot;)
 myNumbers != 30
 </code></pre>
 
@@ -310,9 +310,9 @@ myNumbers != 30
 <pre><code>[1]  TRUE  TRUE FALSE FALSE FALSE
 </code></pre>
 
-<p><strong>NOTE:</strong> Many beginers are confused by the difference between <code>=</code> and <code>==</code>.   The <code>=</code> operator is used for value assignment, traditionally for arguments inside of function calls such as <code>plot(x = 10, y = 1)</code>, or in newer version of R in place of the <code>&lt;-</code> operator as in <code>a = 10</code>.  If you want to compare <em>equivalence</em> between two values you&#39;ll want to use the double <code>==</code> operator.  These operations will evaluate to a logical vector (<code>TRUE</code> or <code>FALSE</code>).</p>
+<p><strong>NOTE:</strong> Many beginers are confused by the difference between <code>=</code> and <code>==</code>.   The <code>=</code> operator is used for value assignment, traditionally for arguments inside of function calls such as <code>plot(x = 10, y = 1)</code>, or in newer versions of R in place of the <code>&lt;-</code> operator as in <code>a = 10</code>.  If you want to compare <em>equivalence</em> between two values you&#39;ll want to use the double <code>==</code> operator.  These operations will evaluate to a logical vector (<code>TRUE</code> or <code>FALSE</code>).</p>
 
-<p>So how can we combine logical comparisons with indexing?  This is a very common idiom in R:</p>
+<p>So how can we combine logical comparisons with indexing?  Here&#39;s an example, which is a very common idiom in R:</p>
 
 <pre><code class="r">myNumbers[myNumbers &gt; 25]
 </code></pre>
@@ -344,14 +344,14 @@ myNumbers != 30
 <pre><code>[1] 10 20 30 40 50
 </code></pre>
 
-<pre><code class="r">myNumbers[3] &lt;- 100
+<pre><code class="r">myNumbers[3]    &lt;- 100
 myNumbers
 </code></pre>
 
 <pre><code>[1]  10  20 100  40  50
 </code></pre>
 
-<pre><code class="r">myNumbers[2:3] &lt;- c(1,2)
+<pre><code class="r">myNumbers[2:3]  &lt;- c(1,2)
 myNumbers
 </code></pre>
 
@@ -413,7 +413,11 @@ head(codons)
 6   CGC         R    basic
 </code></pre>
 
-<p>Pretty neat, eh?  Working with numeric data in table columns is even more straight forward.  In R, it&#39;s very easy to create new columns that are calculated from exisiting data, as you might be used to doing in Excel.  But in R, adding complex annotation columns, like <code>type</code> above, is also very simple.  Notice how we accomplished this task by composing a few minimal data structures, followed by a few relatively straight-forward assignments.  We never had to repeat assignment of any of our amino acid type.  In software engineering we always try to adhere to the &ldquo;<a href="http://en.wikipedia.org/wiki/Don&#x27;t_repeat_yourself">DRY</a>&rdquo; (don&#39;t repeat yourself) principle.  This is much easier to do when working with tabular data in R than it is in traditional spreadsheet packages or other statistical environments.</p>
+<p>Pretty neat, eh?  Working with numeric data in table columns is even more straight forward.  In R, it&#39;s very easy to create new columns that are calculated from exisiting data, as you might be used to doing in Excel.  In R, however, adding complex annotation columns like <code>type</code> above is also very simple.  </p>
+
+<p>Notice how we accomplished this task by composing a few minimal data structures, followed by a few relatively straight-forward assignments.  We never had to repeat assignment of any of our amino acid type.  In software engineering we always try to adhere to the &ldquo;<a href="http://en.wikipedia.org/wiki/Don&#x27;t_repeat_yourself">DRY</a>&rdquo; (don&#39;t repeat yourself) principle.  </p>
+
+<p>This is much easier to do when working with tabular data in R than it is in traditional spreadsheet packages or other statistical environments.</p>
 
         
         </div>

@@ -1,0 +1,139 @@
+# Grammar of Graphics in R (ggplot2)
+
+Base R graphics are extremely rich, but the defaults and programming approach are pretty ugly and outdated.  Hadley Wickham's `ggplot2` package for R, inspired by [Leland Wilkinson's call for a grammer of graphics](http://www.amazon.com/The-Grammar-Graphics-Statistics-Computing/dp/0387245448) in data visualization, is a far better platform for new commers to R.  
+
+In this tutorial, we'll explore the `ggplot2` package, making some very pretty graphs!
+
+
+### Stock R graphics: versatile but ugly
+
+Graphics and data visualization are built into the core of the R environment.  The `plot(...)` function is highly context-aware and it is a great place to start whenever you are exploring new data structures or statistical functions.
+
+For example, if you want to make a simple scatter plot, you can pass in two vectors of values:
+
+```{r}
+plot( c(1, 2, 3, 4), c(10, 20, 30, 40) )
+````
+
+You can also pass functions to plot:
+
+```{r}
+plot( function(x) { x^2 } )
+````
+
+Calling `plot(...)` on data.frame's, linear models, or regressions will produce sensible data visualizations.  It is an incredibly versatile wrapper for producing visualizations of nearly any data structure produced or consumed by base R functions.  
+
+Unfortunately, none of these will be terribly attractive.  Moreover, if you want to customize the graphics parameters used by `plot(...)` you'll find yourself opening a giant can of worms (see `?par`).
+
+Because `plot(...)` is so powerful, it is also very messy.  In response to the messiness of `plot(...)` a few community efforts have arisen to try to simplify, and thereby contrain, data visualization in R.  By far the most well-engineered and widely adopted of these community projects is the `ggplot2` package from [Hadley Wickham](http://had.co.nz/).
+
+
+### ggplot2
+
+If it isn't already available, you can install the `ggplot2` package by running `install.packages("ggplot2")`.  Once the package is installed, loading ggplot2 for use in a script or at the console can be done by calling `library(ggplot2)`.
+
+In this tutorial, I'll demonstrate some example uses of ggplot2, but for many more ideas of what you can do with the library see the full documentation:  [docs.ggplot2.org](http://docs.ggplot2.org/).
+
+For these examples we'll use the built in `diamonds` dataset.  See `?diamonds` for detailed information about this sample data.
+
+
+### Constructing a plot
+
+The general workflow for constructing plots using ggplot2 will be to first describe the structure of the data that you want to visualize and then apply visualization functions to that structure.  Although this coding idiom, and the syntax that has been designed to support it, might feel strange at first you will hopefully soon come to appreciate the elegance that comes from separating the description of *what* data you want to visualize from the particulars of *how* you want to project that visualization.  Let's look at an example.
+
+First, we'll initialize a ggplot2 object that describes both the source of the data we want to visualize and the relationship between variables we are interested (called the "aesthetic mapping" in ggplot lingo):
+
+```{r}
+# Structure of the diamonds dataset
+head(diamonds)
+
+# Load ggplot2
+library(ggplot2)
+
+# Construct a ggplot object to visualize the relationship between clarity 
+# and depth
+p <- ggplot(diamonds, aes(clarity, depth))
+````
+
+The `aes` function in the above block sets up the structure of our visualization: we're interested in considering depth (quantitative) as a function of clarity (qualitative).  The `p` object doesn't yet hold any information about *how* this relationship should be visualized, on the structure of *what* is being compared.
+
+You can use the `+` operator to add visualization functions to this underlying structure to actually produce plots.  The data projection functions all start with `geom_`.  For example, if we want points:
+
+```{r warning=FALSE}
+p + geom_point()
+````
+
+Alternatively, we can easily visualize this relationsip using boxplots:
+
+```{r warning=FALSE}
+# Box plot
+p + geom_boxplot()
+````
+
+As you can see, keeping with the spirit of the R environment, ggplot2 is designed to make it easy to rapidly iterate over different visualization and analysis approaches to your data interactively in the console.  Simply take your underlying ggplot2 object describing data relationships and appply different visualization techniques to find one that suites your project the best!.
+
+
+### Single variable distributions
+
+Above we saw two examples of how we visualize a quantitative variable grouped by a catagorical variable.  When you begin exploring new datasets it is often quite useful to start with a focused look at the distribution of the data along each of your unique quantitative variables.  Here are some examples:
+
+```{r warning=FALSE}
+# Visualize the distribution of the depth variable
+p2 <- ggplot(diamonds, aes(depth))
+
+# Histogram
+p2 + geom_histogram()
+
+# Density distribution
+p2 + geom_density()
+````
+
+
+### Setting axis limits
+
+There are other kinds of function calls that you can apply to ggplot objects other than just the `geom_` functions.  For example, to set the x-axis limits on the above plot we could:
+
+```{r warning=FALSE}
+# Set x-axis limits
+p2 + geom_density() + xlim( c(55, 65) )
+````
+
+You'll see you get a warning telling you that these limits have caused some data to be excluded from your plot.
+
+
+###  Two quantitative variables
+
+Of course, we can also visualize the relationship between two quantitative variables:
+
+```{r warning=FALSE}
+# Visualize depth as a function of price
+p3 <- ggplot( diamonds, aes(price, depth) )
+
+# Use points (scatter plot)
+p3 + geom_point()
+````
+
+
+### Data grouping and secondary visualizations
+
+In your aethetic mappings, you can describe more than just the initial structure of the data projection.  For example, let's say that we want to visualize the categorical variable `clarity`, when comparing `price` and `depth`:
+
+```{r warning=FALSE}
+# Visualize depth as a function of price, use color to visualize clarity label
+p4 <- ggplot( diamonds, aes(price, depth, color = clarity) )
+
+# Use points (scatter plot)
+p4 + geom_point()
+````
+
+For visualizations that use solid objects, you can also specify a `fill` argument:
+
+```{r warning=FALSE}
+p5 <- ggplot(diamonds, aes( price, fill = clarity) ) 
+
+# Setting the alpha channel to 50% makes the density plots transparent
+p5 + geom_density(alpha = 0.5)
+````
+
+There are many more options for visualizations schemes (`geom_` functions), for mapping annotation variables onto additional visualization parameters (ex: `color`, `fill`, `size`, `alpha`), and for manipulating axes, labels and legends (ex: `xlim`, `ylim`, `labs`, `coord_`, `scale_`).  See the excellent ggplot2 documentation for the full list with useful examples:  [docs.ggplot2.org](http://docs.ggplot2.org/).
+

@@ -1,0 +1,31 @@
+# Fitting models and basic statistics
+
+More details comming soon, but here's the code we went over this week:
+
+```{r }
+timePoints  <- 1:10
+response    <- 1:10 * 10
+
+plot(timePoints, response)
+
+jitter    <- rnorm(10, 10)
+response  <- (1:10 * 10) + jitter
+d         <- data.frame(timePoints = timePoints, response = response)
+
+p <- ggplot(d, aes(timePoints, response) ) + geom_point()
+print(p)
+
+fit <- lm(response ~ timePoints, d)
+summary(fit)
+coefficients(fit)
+
+intercept <- coefficients(fit)[1]
+slope     <- coefficients(fit)[2]
+
+model <- function(t) { (slope * t) + intercept }
+print(p + geom_abline(slope = slope, intercept = intercept, color = "lightblue" ) )
+
+ggplot(diamonds, aes( clarity, price) ) + geom_boxplot()
+ggplot(diamonds, aes( price, fill = clarity) ) + geom_density(alpha = 0.5)
+aov( price ~ color, diamonds )
+````

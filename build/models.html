@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        
+        <title> models </title>
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        
+          <link rel="stylesheet" href="css/main.css">
+                            <link rel="stylesheet" href="css/normalize.css">
+                            <link rel="stylesheet" href="css/page.css">
+                            <link rel="stylesheet" href="css/print.css">
+                            <link rel="stylesheet" href="css/tomorrow.css">
+                  
+        
+        <script src="js/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div id = "courser-content" class = "pageView">
+        
+          <div id = 'nav-buttons'>
+            <button id = 'index-button' class = 'pageButton' onclick="window.location.href='index.html'">index</button>
+          </div>
+        
+        <h1>Fitting models and basic statistics</h1>
+
+<p>More details comming soon, but here&#39;s the code we went over this week:</p>
+
+<pre><code class="r">timePoints  &lt;- 1:10
+response    &lt;- 1:10 * 10
+
+plot(timePoints, response)
+</code></pre>
+
+<p><img src="img/models-11.png" alt="plot of chunk models-1"/> </p>
+
+<pre><code class="r">
+jitter    &lt;- rnorm(10, 10)
+response  &lt;- (1:10 * 10) + jitter
+d         &lt;- data.frame(timePoints = timePoints, response = response)
+
+p &lt;- ggplot(d, aes(timePoints, response) ) + geom_point()
+print(p)
+</code></pre>
+
+<p><img src="img/models-12.png" alt="plot of chunk models-1"/> </p>
+
+<pre><code class="r">
+fit &lt;- lm(response ~ timePoints, d)
+summary(fit)
+</code></pre>
+
+<pre><code>
+Call:
+lm(formula = response ~ timePoints, data = d)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-1.272 -0.332  0.188  0.341  1.110 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  10.7680     0.5497    19.6  4.8e-08 ***
+timePoints    9.9452     0.0886   112.2  4.4e-14 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.805 on 8 degrees of freedom
+Multiple R-squared:  0.999, Adjusted R-squared:  0.999 
+F-statistic: 1.26e+04 on 1 and 8 DF,  p-value: 4.43e-14
+</code></pre>
+
+<pre><code class="r">coefficients(fit)
+</code></pre>
+
+<pre><code>(Intercept)  timePoints 
+     10.768       9.945 
+</code></pre>
+
+<pre><code class="r">
+intercept &lt;- coefficients(fit)[1]
+slope     &lt;- coefficients(fit)[2]
+
+model &lt;- function(t) { (slope * t) + intercept }
+print(p + geom_abline(slope = slope, intercept = intercept, color = &quot;lightblue&quot; ) )
+</code></pre>
+
+<p><img src="img/models-13.png" alt="plot of chunk models-1"/> </p>
+
+<pre><code class="r">
+ggplot(diamonds, aes( clarity, price) ) + geom_boxplot()
+</code></pre>
+
+<p><img src="img/models-14.png" alt="plot of chunk models-1"/> </p>
+
+<pre><code class="r">ggplot(diamonds, aes( price, fill = clarity) ) + geom_density(alpha = 0.5)
+</code></pre>
+
+<p><img src="img/models-15.png" alt="plot of chunk models-1"/> </p>
+
+<pre><code class="r">aov( price ~ color, diamonds )
+</code></pre>
+
+<pre><code>Call:
+   aov(formula = price ~ color, data = diamonds)
+
+Terms:
+                    color Residuals
+Sum of Squares  2.685e+10 8.316e+11
+Deg. of Freedom         6     53933
+
+Residual standard error: 3927
+Estimated effects may be unbalanced
+</code></pre>
+
+        
+        </div>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/jquery-1.9.1.min.js"><\/script>')</script>
+        
+          <script src="js/highlight-7.3.min.js"></script>
+                            <script src="js/main.js"></script>
+                            <script src="js/plugins.js"></script>
+                  
+
+    </body>
+</html>

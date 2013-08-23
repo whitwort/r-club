@@ -17,6 +17,16 @@
                , "description" : "How to load and manipulate tabular data in R."
                , "section"     : "Background"
                }
+             , { "content"     : "ggplot2"
+               , "title"       : "Grammar of Graphics in R (ggplot2)"
+               , "description" : "An introduction to one of the most powerful and versatile graphics libraries currently available in any statistical computing environment."
+               , "section"     : "Background"
+               }
+             , { "content"     : "models"
+               , "title"       : "Fitting models for statistical analysis"
+               , "description" : "A quick introduction to the R formula syntax with examples including a GLM ANOVA."
+               , "section"     : "Background"
+               }
              ]
              
   , "templates" : "templates/"

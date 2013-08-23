@@ -124,10 +124,8 @@ With logical operators, you can ask if one vector of values or greater `>` or le
 ``` {r}
 myNumbers > 25
 myNumbers < 25
-
 #Equality comparison uses == instead of =
 myNumbers == 30
-
 # The `!` operator negates logical vectors ("not")
 myNumbers != 30
 !(myNumbers > 25)

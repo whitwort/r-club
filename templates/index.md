@@ -1,6 +1,6 @@
 # R-Club
 
-Welcome to the companion website for R-Club!  This summer we will be meeting on Friday afternoons at 1pm in Parmly 313 (the Biology computer lab).
+Welcome to the companion website for R-Club!  We met last summer on Friday afternoons at 1pm in Parmly 313 (the Biology computer lab).  If you'd like to be included in future emails about W&L R club just email me!
 
 <div id = "index">
 

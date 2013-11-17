@@ -8,7 +8,7 @@ ggplot(diamonds, aes(depth, fill = cut)) + geom_density(alpha = 0.2) + xlim(55, 
 
 [R][] is a free software tool designed to facilitate interactive data analysis and visualization.  It has recently become [the most popular platform](http://r4stats.com/articles/popularity/) for data analysis in the biosciences and data science community, replacing commercial software packages like SPSS and SASS.  Its name is a bit of a pun on its history:  R is a derivative of the commercial [S-Plus](http://en.wikipedia.org/wiki/S-PLUS).  It was originally developed by [Ross Ihaka](http://en.wikipedia.org/wiki/Ross_Ihaka) and [Robert Gentlemen](http://en.wikipedia.org/wiki/Robert_Gentleman_(statistician).
 
-[R][] is really two related things: a powerful programming language designed for interactive data analysis and a huge community of researcher/programmers who have implemented analysis and visualization algorithms in R.  To explore general statistical packages available for R see [CRAN](http://cran.r-project.org/web/views/); for bioinformatics and computational biology packages see [BioConductor](http://www.bioconductor.org/)).
+[R][] is really two related things: a powerful programming language designed for interactive data analysis and a huge community of researcher/programmers who have implemented analysis and visualization algorithms in R.  To explore general statistical packages available for R see [CRAN](http://cran.r-project.org/web/views/); for bioinformatics and computational biology packages see [BioConductor](http://www.bioconductor.org/).
 
 
 ## Why use R?

@@ -5,7 +5,7 @@ More details coming soon, but here's the code we went over this week.  Sample da
 ```{r message=FALSE}
 # Load a sample microarray data set.  Your path will depend on where you saved
 # this file.
-LiCl <- read.delim("../data/LiCl.txt")
+LiCl <- read.delim("~/r-club/data/LiCl.txt")
 # The NAME column contains unique gene identifiers, so we'll use these as the
 # row labels in our data.frame and remove the NAME column from the table.
 rownames(LiCl) <- LiCl$NAME

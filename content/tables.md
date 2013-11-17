@@ -46,18 +46,28 @@ If you're working in [RStudio](http://www.rstudio.com/), you can use the "Import
 
 To follow along with this example, you can download the genetic code table and save it in your current working directory:  [codons.txt](data/codons.txt).  This table has two columns:  "codon" and "aminoAcid."  To load the table into a variable:
 
-```{r echo=FALSE}
-print(getwd())
-codons <- read.table("~/r-club/data/codons.txt", header = TRUE, stringsAsFactors = FALSE)
-````
 
-```{r warning=FALSE, error=FALSE}
-codons <- read.table( "codons.txt"
-                    , header = TRUE
-                    , stringsAsFactors = FALSE
-                    )
+```
+## [1] "/home/gregg/r-club/content"
+```
+
+
+
+```r
+codons <- read.table("codons.txt", header = TRUE, stringsAsFactors = FALSE)
 head(codons)
-````
+```
+
+```
+##   codon aminoAcid
+## 1   GCU         A
+## 2   GCC         A
+## 3   GCA         A
+## 4   GCG         A
+## 5   CGU         R
+## 6   CGC         R
+```
+
 
 The `read.table` function takes a large number of optional arguments which allows it to adapt to a wide variety of different file formats.  Here we've specified `header = TRUE` because the first line of our file contains column headings.  The `stringsAsFactors = FALSE` argument tells R not to try to convert text columns to a special type of data structure called a `factor`.  Factors are intended to flag strings as describing levels of a categorical variable.  They are a more advanced topic then we'll dive into here; so we'll turn them off.
 
@@ -66,17 +76,54 @@ The `read.table` function takes a large number of optional arguments which allow
 
 Once your data is loaded into a data.frame (table), you can access vectors of data for individual variables in the table using the `$` syntax:
 
-```{r}
+
+```r
 codons$codon
+```
+
+```
+##  [1] "GCU" "GCC" "GCA" "GCG" "CGU" "CGC" "CGA" "CGG" "AGA" "AGG" "AAU"
+## [12] "AAC" "GAU" "GAC" "UGU" "UGC" "CAA" "CAG" "GAA" "GAG" "GGU" "GGC"
+## [23] "GGA" "GGG" "CAU" "CAC" "AUU" "AUC" "AUA" "AUG" "UUA" "UUG" "CUU"
+## [34] "CUC" "CUA" "CUG" "AAA" "AAG" "UUU" "UUC" "CCU" "CCC" "CCA" "CCG"
+## [45] "UCU" "UCC" "UCA" "UCG" "AGU" "AGC" "ACU" "ACC" "ACA" "ACG" "UGG"
+## [56] "UAU" "UAC" "GUU" "GUC" "GUA" "GUG" "UAA" "UGA" "UAG"
+```
+
+```r
 codons$aminoAcid
-````
+```
+
+```
+##  [1] "A"    "A"    "A"    "A"    "R"    "R"    "R"    "R"    "R"    "R"   
+## [11] "N"    "N"    "D"    "D"    "C"    "C"    "Q"    "Q"    "E"    "E"   
+## [21] "G"    "G"    "G"    "G"    "H"    "H"    "I"    "I"    "I"    "M"   
+## [31] "L"    "L"    "L"    "L"    "L"    "L"    "K"    "K"    "F"    "F"   
+## [41] "P"    "P"    "P"    "P"    "S"    "S"    "S"    "S"    "S"    "S"   
+## [51] "T"    "T"    "T"    "T"    "W"    "Y"    "Y"    "V"    "V"    "V"   
+## [61] "V"    "STOP" "STOP" "STOP"
+```
+
 
 If we want to access a single data point we can use indexing syntax with `[]`.  When we are working with a 2D data structure, we can specific a `[row, col]`:
 
-```{r}
-codons[ 1, 2 ]
-codons[ 2, 1 ]
-````
+
+```r
+codons[1, 2]
+```
+
+```
+## [1] "A"
+```
+
+```r
+codons[2, 1]
+```
+
+```
+## [1] "GCC"
+```
+
 
 Let's explore indexing syntax in greater depth...
 
@@ -84,80 +131,221 @@ Let's explore indexing syntax in greater depth...
 ### Indexing syntax in R:  extracting & replacing values
 
 Let's say we have a vector of numbers:
-``` {r}
-myNumbers <- c( 10, 20, 30, 40, 50 )
-````
+
+```r
+myNumbers <- c(10, 20, 30, 40, 50)
+```
+
 
 We can extract elements from 1D vectors using the index syntax `[]` and integers:
-``` {r}
+
+```r
 myNumbers
+```
+
+```
+## [1] 10 20 30 40 50
+```
+
+```r
 myNumbers[1]
+```
+
+```
+## [1] 10
+```
+
+```r
 myNumbers[3]
-````
+```
+
+```
+## [1] 30
+```
+
 
 Here, we've extracted elements at the position given by the integer we put inside of the `[...]`.  Remember that the `1` and `3` are actually vectors of integers.  Of course this means we can also use integer vectors with more than one element inside of our index `[...]`'s.  For example:
 
-``` {r}
-myNumbers[ c(1, 3) ]
-````
+
+```r
+myNumbers[c(1, 3)]
+```
+
+```
+## [1] 10 30
+```
+
 
 You can use the `:` operator to easily create a sequence of numbers:
-``` {r}
+
+```r
 # The : operator creates a series of numbers
 1:5
+```
+
+```
+## [1] 1 2 3 4 5
+```
+
+```r
 2:10
+```
+
+```
+## [1]  2  3  4  5  6  7  8  9 10
+```
+
+```r
 # We can use this inside of our [...]
 myNumbers[2:3]
-````
+```
+
+```
+## [1] 20 30
+```
+
 
 In addition to putting integer vectors inside of the index `[...]` we can also use logical vectors.  If we do, `TRUE` at a position causes a value to be extracted, while a `FALSE` indicates that it should be skipped.  Let's look at an example:
 
-``` {r}
+
+```r
 myNumbers
-myNumbers[ c(FALSE, TRUE , TRUE , TRUE , TRUE ) ]
-myNumbers[ c(TRUE , FALSE, FALSE, FALSE, FALSE) ]
-````
+```
+
+```
+## [1] 10 20 30 40 50
+```
+
+```r
+myNumbers[c(FALSE, TRUE, TRUE, TRUE, TRUE)]
+```
+
+```
+## [1] 20 30 40 50
+```
+
+```r
+myNumbers[c(TRUE, FALSE, FALSE, FALSE, FALSE)]
+```
+
+```
+## [1] 10
+```
+
 
 So why would you ever want to do this?  The answer lies in the combination of indexing and the logical operators (`>`, `<`, `==`, `!=`, and `%in%`).
 
 With logical operators, you can ask if one vector of values or greater `>` or less `<` than another vector of values.  You can also ask if one vector of values is equal `==` or not equal `!=` to another.  Here are some examples:
 
-``` {r}
+
+```r
 myNumbers > 25
+```
+
+```
+## [1] FALSE FALSE  TRUE  TRUE  TRUE
+```
+
+```r
 myNumbers < 25
-#Equality comparison uses == instead of =
+```
+
+```
+## [1]  TRUE  TRUE FALSE FALSE FALSE
+```
+
+```r
+# Equality comparison uses == instead of =
 myNumbers == 30
-# The `!` operator negates logical vectors ("not")
+```
+
+```
+## [1] FALSE FALSE  TRUE FALSE FALSE
+```
+
+```r
+# The `!` operator negates logical vectors ('not')
 myNumbers != 30
+```
+
+```
+## [1]  TRUE  TRUE FALSE  TRUE  TRUE
+```
+
+```r
 !(myNumbers > 25)
-````
+```
+
+```
+## [1]  TRUE  TRUE FALSE FALSE FALSE
+```
+
 
 **NOTE `=` vs `==`:** Many beginers are confused by the difference between `=` and `==`.   The `=` operator is used for value assignment, traditionally for arguments inside of function calls such as `plot(x = 10, y = 1)`, or in newer versions of R in place of the `<-` operator as in `a = 10`.  If you want to compare *equivalence* between two values you'll want to use the double `==` operator.  These operations will evaluate to a logical vector (`TRUE` or `FALSE`).
 
 So how can we combine logical comparisons with indexing?  Here's an example, which is a very common idiom in R:
 
-``` {r}
+
+```r
 myNumbers[myNumbers > 25]
+```
+
+```
+## [1] 30 40 50
+```
+
+```r
 myNumbers[myNumbers < 25]
-````
+```
+
+```
+## [1] 10 20
+```
+
 
 You can get fancy...
 
-``` {r}
-myNumbers[ (myNumbers %% 2) == 0 ]
-````
+
+```r
+myNumbers[(myNumbers%%2) == 0]
+```
+
+```
+## [1] 10 20 30 40 50
+```
+
 
 What happened there?  If you need help figuring it out, look up the `%%` (*modulo*) operator on the help panel.
 
 Finally, the indexing `[...]` syntax isn't just used to extract values from data structures.  It can also be used to assign values *into* existing structures.  For example:
 
-``` {r}
+
+```r
 myNumbers
-myNumbers[3]    <- 100
+```
+
+```
+## [1] 10 20 30 40 50
+```
+
+```r
+myNumbers[3] <- 100
 myNumbers
-myNumbers[2:3]  <- c(1,2)
+```
+
+```
+## [1]  10  20 100  40  50
+```
+
+```r
+myNumbers[2:3] <- c(1, 2)
 myNumbers
-````
+```
+
+```
+## [1] 10  1  2 40 50
+```
+
 
 Now, back to our table...
 
@@ -168,36 +356,78 @@ We can use the `$` syntax (like the `[...]`) to assign data to existing columns 
 
 We can start by creating a new column called `type` that contains all `NA` values:
 
-```{r}
+
+```r
 codons$type <- NA
 head(codons)
-````
+```
+
+```
+##   codon aminoAcid type
+## 1   GCU         A   NA
+## 2   GCC         A   NA
+## 3   GCA         A   NA
+## 4   GCG         A   NA
+## 5   CGU         R   NA
+## 6   CGC         R   NA
+```
+
 
 Here could have hand-encoded a vector of 20 strings describing the type of each amino acid in our table.  But we'll take the lazier path and learn a few new R tricks along the way.  Let's make some vectors that describe which amino acids belong to each of the four categories:
 
-```{r}
+
+```r
 # Assuming physiological pH; we'll call histidine basic for simplicity!
-nonpolar  <- c( "A", "C", "G", "I", "L", "M", "F", "P", "W", "V" )
-polar     <- c( "N", "Q", "S", "T", "Y"                          )
-acidic    <- c( "D", "E"                                         )
-basic     <- c( "R", "H", "K"                                    )
+nonpolar <- c("A", "C", "G", "I", "L", "M", "F", "P", "W", "V")
+polar <- c("N", "Q", "S", "T", "Y")
+acidic <- c("D", "E")
+basic <- c("R", "H", "K")
 # We can make sure we've annotated all 20 amino acids
-length( c( nonpolar, polar, acidic, basic ) ) == 20
-````
+length(c(nonpolar, polar, acidic, basic)) == 20
+```
+
+```
+## [1] TRUE
+```
+
 
 Now we can update our `type` column using the annotations that we've saved in these variables.  The logical `%in%` operator tests whether or not one vector of values (left side) is found in another (right side).  It returns a vector of boolean values of the same length as the left-hand test vector.  So we can do this:
 
-```{r}
+
+```r
 # Which rows contain nonpolar amino acids?
 codons$aminoAcid %in% nonpolar
+```
+
+```
+##  [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [12] FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE
+## [23]  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [34]  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [45] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+## [56] FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE
+```
+
+```r
 # We can use these logical vectors to assign our type annotations
-codons[ codons$aminoAcid %in% nonpolar, "type" ] <- "nonpolar"
-codons[ codons$aminoAcid %in% polar,    "type" ] <- "polar"
-codons[ codons$aminoAcid %in% acidic,   "type" ] <- "acidic"
-codons[ codons$aminoAcid %in% basic,    "type" ] <- "basic"
+codons[codons$aminoAcid %in% nonpolar, "type"] <- "nonpolar"
+codons[codons$aminoAcid %in% polar, "type"] <- "polar"
+codons[codons$aminoAcid %in% acidic, "type"] <- "acidic"
+codons[codons$aminoAcid %in% basic, "type"] <- "basic"
 # Check to see if it worked...
 head(codons)
-````
+```
+
+```
+##   codon aminoAcid     type
+## 1   GCU         A nonpolar
+## 2   GCC         A nonpolar
+## 3   GCA         A nonpolar
+## 4   GCG         A nonpolar
+## 5   CGU         R    basic
+## 6   CGC         R    basic
+```
+
 
 Pretty neat, eh?  Working with numeric data in table columns is even more straight forward.  In R, it's very easy to create new columns that are calculated from exisiting data, as you might be used to doing in Excel.  In R, however, adding complex annotation columns like `type` above is also very simple.
 

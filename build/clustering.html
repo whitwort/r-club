@@ -39,16 +39,8 @@
 
 <pre><code class="r"># Load a sample microarray data set.  Your path will depend on where you saved
 # this file.
-LiCl &lt;- read.delim(&quot;../data/LiCl.txt&quot;)
-</code></pre>
-
-<pre><code>Warning: cannot open file &#39;../data/LiCl.txt&#39;: No such file or directory
-</code></pre>
-
-<pre><code>Error: cannot open the connection
-</code></pre>
-
-<pre><code class="r"># The NAME column contains unique gene identifiers, so we&#39;ll use these as the
+LiCl &lt;- read.delim(&quot;~/r-club/data/LiCl.txt&quot;)
+# The NAME column contains unique gene identifiers, so we&#39;ll use these as the
 # row labels in our data.frame and remove the NAME column from the table.
 rownames(LiCl) &lt;- LiCl$NAME
 LiCl$NAME &lt;- NULL

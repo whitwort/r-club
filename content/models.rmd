@@ -1,31 +1,36 @@
 # Fitting models and basic statistics
 
-More details comming soon, but here's the code we went over this week:
+More details coming soon, but here's the code we went over this week:
 
-```{r }
+```{r}
+# Load ggplot2
+library(ggplot2)
+# Generate some fake data
 timePoints  <- 1:10
 response    <- 1:10 * 10
-
 plot(timePoints, response)
-
+# Add some randomized jitter to our fake data
 jitter    <- rnorm(10, 10)
 response  <- (1:10 * 10) + jitter
 d         <- data.frame(timePoints = timePoints, response = response)
-
 p <- ggplot(d, aes(timePoints, response) ) + geom_point()
 print(p)
-
+# Fit a linear model: model response as a function of timePoint
 fit <- lm(response ~ timePoints, d)
 summary(fit)
 coefficients(fit)
-
+# Extract the intercept and slope parameters from our linear model fit
 intercept <- coefficients(fit)[1]
 slope     <- coefficients(fit)[2]
-
-model <- function(t) { (slope * t) + intercept }
-print(p + geom_abline(slope = slope, intercept = intercept, color = "lightblue" ) )
-
+# Plot the model as an abline on top of our data
+print(p + geom_abline( slope = slope
+                     , intercept = intercept
+                     , color = "lightblue" )
+                     )
+# Perform a one-way GLM ANOVA on the sample diamonds data set
 ggplot(diamonds, aes( clarity, price) ) + geom_boxplot()
 ggplot(diamonds, aes( price, fill = clarity) ) + geom_density(alpha = 0.5)
-aov( price ~ color, diamonds )
+a <- aov( price ~ color, diamonds )
+print(a)
+summary(a)
 ````

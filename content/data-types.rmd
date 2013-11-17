@@ -1,22 +1,25 @@
 # Working with simple data
 
-
 ### The command line
 
-The command line, or console, is the primary mechanism that you'll use to interact with R:  you enter instructions and the R interpreter performs computations for you.  If you have a common set of tasks that you need to repeat often, or a set of instructions that are too complicated to keep track of *ad hoc*, you can save a set of commands into a text file called an R script (by convention, these files have a ".r" or ".R" at the end).
+The command line is the primary mechanism that you'll use to interact with R.  When you enter instructions the R interpreter will perform computations for you. 
 
-Let's try entering some simple math expressions:
+While this may seem like an arcane method for interacting with software, it has one *huge* advantage over point-and-click environments:  it is incredibly easy to repeat or abstract computations that you need to do often or on very large data sets.  Any instruction that you type at the R command line can also be saved to a "R script" file.  These files are just plain text files (by convention, R scripts have a ".r" or ".R" at the end of the file name).  Running an R script is identical to hand typing all of the commands in that script at the command line.
 
-```{r }
+Let's try entering some simple math expressions to see how this interaction with the command line works.  In the code examples you'll see on this site the commands you type are followed by the text or visual output that R produces.
+
+```{r}
 1 + 2
 2 * 3
 4 ^ 5
 6.7 / 8.9
 ````
 
-As you might expect, R recognizes standard syntax for numbers and mathematical operators.  When you've entered a complete expression at the command line and hit "enter", R will evaluate the result of that expression.  If you don't tell R what to do with the result, it will just print out a representation of the value on the next line.
+As you might expect, R recognizes the standard syntax for numbers and mathematical operators.  When you've enter a complete [expression](http://en.wikipedia.org/wiki/Expression_(computer_science)) at the command line and hit "enter", R [evaluates](http://en.wikipedia.org/wiki/Evaluation_strategy) the result of that expression.  If you don't tell R what to do with the result, it will just print out a representation of the value on the next line.
 
-Often though, you want to perform a calculation and save the result for later use.  If you've used Excel, you've probably used cells on a worksheet to hold the results of calculations based on the data in other cells.  In R, we can save the results of computations in variables.  To do this, we'll use the assignment operator, which is a little arrow in R `<-` (if you're comming from another programming language and this syntax bothers you, you can use `=` for assignment -- see help pages for additional information about edge cases):
+Often, though, you will want to perform a calculation and save the result for later use.  If you've used Excel, you've probably used cells on a worksheet to hold the results of calculations based on the data in other cells.  In R we can save the results of computations in [variables](http://en.wikipedia.org/wiki/Variable_(computer_science)).  To do this we'll use the assignment operator, which is a little arrow in R `<-`.
+
+(If you're coming from another programming language and the arrow syntax bugs you, you *can* use `=` operator for general assignment -- see the R help pages for a few important edge cases.)
 
 ```{r}
 a <- 10
@@ -27,7 +30,7 @@ c <- a / b
 c
 ````
 
-If you're working with very large numbers, common in the sciences, there's a shorthand syntax you can use:
+If you're working with very large numbers there's a shorthand syntax you can use for scientific notation:
 
 ```{r}
 2e10
@@ -37,13 +40,13 @@ If you're working with very large numbers, common in the sciences, there's a sho
 
 In that last line we used the comparison operator `==`; it tests whether or not two values are equivalent.
 
-
 Finally, let's see what happens if we try hitting `enter` before we've finished entering a complete expression.  Type `2 +` and then hit `enter`.  You'll see a little `+` shows up as your prompt on the next line.  This is R's way of telling you the text you've entered so far isn't a complete thought.  Finish this expression by entering another number and hitting `enter` again.
-
 
 ### Everything is a vector
 
-In the above expressions we appeared to be doing computations on single numbers.  In fact, something more complicated was going on under the hood.  In R all data are actually vectors of data.  Unlike other programming languages, there are no atomic values; the most basic data structure is a vector.  This may seem odd until you consider the key implication:  all operators and functions in R are built to operate on vectors of data, not just single values.  Single values are just vectors with one element.
+In the above expressions we appeared to be doing computations on single numbers.  In fact, something more complicated was going on under the hood.  In R all data are actually [vectors](http://en.wikipedia.org/wiki/Array_data_structure) of data.  
+
+Unlike other programming languages, there are no atomic values in R; the most basic data structure is a vector.  Single values are just vectors with one element.  This may seem odd at first, until you consider the key implication:  all operators and functions in R are built to handle vectors of data, not just single values.  This means anything that can be done with a single number can also be done with a vector of numbers.  This is a language that was clearly designed by statisticians! 
 
 You can see how many elements a vector holds using the `length` function:
 
@@ -52,7 +55,7 @@ length(10)
 length(c)
 ````
 
-Above, `length` is the first example we've seen of an R function.  In programming functions are analogous to their mathematical counter parts: the take in one or more values and evaluate to a possibly new value.  The syntax for running, or "calling", a function will always be in the form of `functionName(value1, value2, ...)`.
+Above, `length` is the first example we've seen of an R [function](http://en.wikipedia.org/wiki/Function_(programming)).  In programming, functions are analogous to their mathematical counter parts: they take in one or more values and evaluate to a new value.  The R syntax for running, or "calling", a function is in the form of `functionName(value1, value2, ...)`.
 
 The `length` function has reported that we've been working with vectors of 1 element so far.  To **c**ompose a vector with more than one element, we'll use the `c()` function:
 
@@ -64,7 +67,7 @@ d + 10
 
 As you can see, mathematical operators in R are built to handle vectorized operations:  we could add a 4 element vector `d` to a one element vector `10` and get a sensible result.
 
-**Side note for programmers**:  if you're comming to R with a background in other programming languages, you might have caught something in the last code block that freaked you out.  We had previously assigned the variable `c` to hold a number; yet we were still able to call the built-in `c` function from this scope.  In almost any other common scripting language this would not have worked.  Although base scoping rules in R are strictly lexical, there are a number of aggressive additional checks done on failures.  For example, when an attempt is made to apply a non-function in an inner scope, the interpreter will check up-values.  Another example of this design philosophy at play in R is aggressive partial matching for named arguments in function calls.
+**Side note for programmers**:  if you're coming to R with a background in other programming languages, you might have caught something in the last code block that freaked you out.  We had previously assigned the variable `c` to hold a number; yet we were still able to call the built-in `c` function from this scope.  In almost any other common scripting language this would not have worked.  Although base scoping rules in R are strictly [lexical](http://en.wikipedia.org/wiki/Scope_(computer_science)#Lexical_scoping_vs._dynamic_scoping), there are a number of aggressive additional checks that are performed on lookup or evalution failures.  For example, when an attempt is made to apply a non-function in an inner scope, the interpreter will ascend the scope chain looking for upvalues that *are* functions.  This is why we were able to bind `c` to a vector of numbers in our current scope and also apply the base R `c()` function.  Another example of this design philosophy at play in R is aggressive partial matching for named arguments in function calls.
 
 
 ### Strings and Boolean values
@@ -111,7 +114,7 @@ c(TRUE, FALSE, TRUE, FALSE)
 
 ### Missing Data
 
-R has built-in support for flagging values as missing data.  The `NA` can be mixed with any kind of vector:
+R has built-in support for flagging values as missing data.  The `NA` value can be mixed with any kind of vector:
 
 ```{r}
 c(1,2,NA,4)
@@ -121,7 +124,7 @@ c(TRUE, FALSE, NA, FALSE)
 
 Most R functions will either understand how to deal with missing data, or issue an error if they involve a type of statistical analysis that can't be used with missing data.
 
-**A note about NULL**:  R also has a special "no-value" type called `NULL`.  Users comming from other programming languages often confuse the two (Python's None type, for example, does double duty).  By convention, you should use `NA` in data structures to represent missing data points; `NULL` should be used to refer to unassigned variables or unspecified arguments to functions.
+**A note about NULL**:  R also has a special "no-value" type called `NULL`.  If you are coming to R from another programming languages it is easy confuse the two (for example, in Python the `None` type is often used to do double duty, signifying `NULL` or `NA` in depending on the context).  By convention, you should use `NA` in data structures to represent missing data points (data that is *really* data even though it is a missing observation).  `NULL` should be used to refer to unassigned variables or unspecified arguments to functions.
 
 
 ### Getting help

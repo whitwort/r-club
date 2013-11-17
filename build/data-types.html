@@ -37,9 +37,11 @@
 
 <h3>The command line</h3>
 
-<p>The command line, or console, is the primary mechanism that you&#39;ll use to interact with R:  you enter instructions and the R interpreter performs computations for you.  If you have a common set of tasks that you need to repeat often, or a set of instructions that are too complicated to keep track of <em>ad hoc</em>, you can save a set of commands into a text file called an R script (by convention, these files have a &ldquo;.r&rdquo; or &ldquo;.R&rdquo; at the end).</p>
+<p>The command line is the primary mechanism that you&#39;ll use to interact with R.  When you enter instructions the R interpreter will perform computations for you. </p>
 
-<p>Let&#39;s try entering some simple math expressions:</p>
+<p>While this may seem like an arcane method for interacting with software, it has one <em>huge</em> advantage over point-and-click environments:  it is incredibly easy to repeat or abstract computations that you need to do often or on very large data sets.  Any instruction that you type at the R command line can also be saved to a &ldquo;R script&rdquo; file.  These files are just plain text files (by convention, R scripts have a &ldquo;.r&rdquo; or &ldquo;.R&rdquo; at the end of the file name).  Running an R script is identical to hand typing all of the commands in that script at the command line.</p>
+
+<p>Let&#39;s try entering some simple math expressions to see how this interaction with the command line works.  In the code examples you&#39;ll see on this site the commands you type are followed by the text or visual output that R produces.</p>
 
 <pre><code class="r">1 + 2
 </code></pre>
@@ -65,9 +67,11 @@
 <pre><code>[1] 0.7528
 </code></pre>
 
-<p>As you might expect, R recognizes standard syntax for numbers and mathematical operators.  When you&#39;ve entered a complete expression at the command line and hit &ldquo;enter&rdquo;, R will evaluate the result of that expression.  If you don&#39;t tell R what to do with the result, it will just print out a representation of the value on the next line.</p>
+<p>As you might expect, R recognizes the standard syntax for numbers and mathematical operators.  When you&#39;ve enter a complete <a href="http://en.wikipedia.org/wiki/Expression_(computer_science">expression</a>) at the command line and hit &ldquo;enter&rdquo;, R <a href="http://en.wikipedia.org/wiki/Evaluation_strategy">evaluates</a> the result of that expression.  If you don&#39;t tell R what to do with the result, it will just print out a representation of the value on the next line.</p>
 
-<p>Often though, you want to perform a calculation and save the result for later use.  If you&#39;ve used Excel, you&#39;ve probably used cells on a worksheet to hold the results of calculations based on the data in other cells.  In R, we can save the results of computations in variables.  To do this, we&#39;ll use the assignment operator, which is a little arrow in R <code>&lt;-</code> (if you&#39;re comming from another programming language and this syntax bothers you, you can use <code>=</code> for assignment &ndash; see help pages for additional information about edge cases):</p>
+<p>Often, though, you will want to perform a calculation and save the result for later use.  If you&#39;ve used Excel, you&#39;ve probably used cells on a worksheet to hold the results of calculations based on the data in other cells.  In R we can save the results of computations in <a href="http://en.wikipedia.org/wiki/Variable_(computer_science">variables</a>).  To do this we&#39;ll use the assignment operator, which is a little arrow in R <code>&lt;-</code>.</p>
+
+<p>(If you&#39;re coming from another programming language and the arrow syntax bugs you, you <em>can</em> use <code>=</code> operator for general assignment &ndash; see the R help pages for a few important edge cases.)</p>
 
 <pre><code class="r">a &lt;- 10
 a
@@ -90,7 +94,7 @@ c
 <pre><code>[1] 0.4762
 </code></pre>
 
-<p>If you&#39;re working with very large numbers, common in the sciences, there&#39;s a shorthand syntax you can use:</p>
+<p>If you&#39;re working with very large numbers there&#39;s a shorthand syntax you can use for scientific notation:</p>
 
 <pre><code class="r">2e10
 </code></pre>
@@ -116,7 +120,9 @@ c
 
 <h3>Everything is a vector</h3>
 
-<p>In the above expressions we appeared to be doing computations on single numbers.  In fact, something more complicated was going on under the hood.  In R all data are actually vectors of data.  Unlike other programming languages, there are no atomic values; the most basic data structure is a vector.  This may seem odd until you consider the key implication:  all operators and functions in R are built to operate on vectors of data, not just single values.  Single values are just vectors with one element.</p>
+<p>In the above expressions we appeared to be doing computations on single numbers.  In fact, something more complicated was going on under the hood.  In R all data are actually <a href="http://en.wikipedia.org/wiki/Array_data_structure">vectors</a> of data.  </p>
+
+<p>Unlike other programming languages, there are no atomic values in R; the most basic data structure is a vector.  Single values are just vectors with one element.  This may seem odd at first, until you consider the key implication:  all operators and functions in R are built to handle vectors of data, not just single values.  This means anything that can be done with a single number can also be done with a vector of numbers.  This is a language that was clearly designed by statisticians! </p>
 
 <p>You can see how many elements a vector holds using the <code>length</code> function:</p>
 
@@ -132,7 +138,7 @@ c
 <pre><code>[1] 1
 </code></pre>
 
-<p>Above, <code>length</code> is the first example we&#39;ve seen of an R function.  In programming functions are analogous to their mathematical counter parts: the take in one or more values and evaluate to a possibly new value.  The syntax for running, or &ldquo;calling&rdquo;, a function will always be in the form of <code>functionName(value1, value2, ...)</code>.</p>
+<p>Above, <code>length</code> is the first example we&#39;ve seen of an R <a href="http://en.wikipedia.org/wiki/Function_(programming">function</a>).  In programming, functions are analogous to their mathematical counter parts: they take in one or more values and evaluate to a new value.  The R syntax for running, or &ldquo;calling&rdquo;, a function is in the form of <code>functionName(value1, value2, ...)</code>.</p>
 
 <p>The <code>length</code> function has reported that we&#39;ve been working with vectors of 1 element so far.  To <strong>c</strong>ompose a vector with more than one element, we&#39;ll use the <code>c()</code> function:</p>
 
@@ -151,7 +157,7 @@ d + 10
 
 <p>As you can see, mathematical operators in R are built to handle vectorized operations:  we could add a 4 element vector <code>d</code> to a one element vector <code>10</code> and get a sensible result.</p>
 
-<p><strong>Side note for programmers</strong>:  if you&#39;re comming to R with a background in other programming languages, you might have caught something in the last code block that freaked you out.  We had previously assigned the variable <code>c</code> to hold a number; yet we were still able to call the built-in <code>c</code> function from this scope.  In almost any other common scripting language this would not have worked.  Although base scoping rules in R are strictly lexical, there are a number of aggressive additional checks done on failures.  For example, when an attempt is made to apply a non-function in an inner scope, the interpreter will check up-values.  Another example of this design philosophy at play in R is aggressive partial matching for named arguments in function calls.</p>
+<p><strong>Side note for programmers</strong>:  if you&#39;re coming to R with a background in other programming languages, you might have caught something in the last code block that freaked you out.  We had previously assigned the variable <code>c</code> to hold a number; yet we were still able to call the built-in <code>c</code> function from this scope.  In almost any other common scripting language this would not have worked.  Although base scoping rules in R are strictly <a href="http://en.wikipedia.org/wiki/Scope_(computer_science">lexical</a>#Lexical_scoping_vs._dynamic_scoping), there are a number of aggressive additional checks that are performed on lookup or evalution failures.  For example, when an attempt is made to apply a non-function in an inner scope, the interpreter will ascend the scope chain looking for upvalues that <em>are</em> functions.  This is why we were able to bind <code>c</code> to a vector of numbers in our current scope and also apply the base R <code>c()</code> function.  Another example of this design philosophy at play in R is aggressive partial matching for named arguments in function calls.</p>
 
 <h3>Strings and Boolean values</h3>
 
@@ -254,7 +260,7 @@ s
 
 <h3>Missing Data</h3>
 
-<p>R has built-in support for flagging values as missing data.  The <code>NA</code> can be mixed with any kind of vector:</p>
+<p>R has built-in support for flagging values as missing data.  The <code>NA</code> value can be mixed with any kind of vector:</p>
 
 <pre><code class="r">c(1,2,NA,4)
 </code></pre>
@@ -276,7 +282,7 @@ s
 
 <p>Most R functions will either understand how to deal with missing data, or issue an error if they involve a type of statistical analysis that can&#39;t be used with missing data.</p>
 
-<p><strong>A note about NULL</strong>:  R also has a special &ldquo;no-value&rdquo; type called <code>NULL</code>.  Users comming from other programming languages often confuse the two (Python&#39;s None type, for example, does double duty).  By convention, you should use <code>NA</code> in data structures to represent missing data points; <code>NULL</code> should be used to refer to unassigned variables or unspecified arguments to functions.</p>
+<p><strong>A note about NULL</strong>:  R also has a special &ldquo;no-value&rdquo; type called <code>NULL</code>.  If you are coming to R from another programming languages it is easy confuse the two (for example, in Python the <code>None</code> type is often used to do double duty, signifying <code>NULL</code> or <code>NA</code> in depending on the context).  By convention, you should use <code>NA</code> in data structures to represent missing data points (data that is <em>really</em> data even though it is a missing observation).  <code>NULL</code> should be used to refer to unassigned variables or unspecified arguments to functions.</p>
 
 <h3>Getting help</h3>
 

@@ -35,28 +35,29 @@
         
         <h1>Fitting models and basic statistics</h1>
 
-<p>More details comming soon, but here&#39;s the code we went over this week:</p>
+<p>More details coming soon, but here&#39;s the code we went over this week:</p>
 
-<pre><code class="r">timePoints  &lt;- 1:10
+<pre><code class="r"># Load ggplot2
+library(ggplot2)
+# Generate some fake data
+timePoints  &lt;- 1:10
 response    &lt;- 1:10 * 10
-
 plot(timePoints, response)
 </code></pre>
 
 <p><img src="img/models-11.png" alt="plot of chunk models-1"/> </p>
 
-<pre><code class="r">
+<pre><code class="r"># Add some randomized jitter to our fake data
 jitter    &lt;- rnorm(10, 10)
 response  &lt;- (1:10 * 10) + jitter
 d         &lt;- data.frame(timePoints = timePoints, response = response)
-
 p &lt;- ggplot(d, aes(timePoints, response) ) + geom_point()
 print(p)
 </code></pre>
 
 <p><img src="img/models-12.png" alt="plot of chunk models-1"/> </p>
 
-<pre><code class="r">
+<pre><code class="r"># Fit a linear model: model response as a function of timePoint
 fit &lt;- lm(response ~ timePoints, d)
 summary(fit)
 </code></pre>
@@ -66,39 +67,41 @@ Call:
 lm(formula = response ~ timePoints, data = d)
 
 Residuals:
-   Min     1Q Median     3Q    Max 
--1.272 -0.332  0.188  0.341  1.110 
+    Min      1Q  Median      3Q     Max 
+-1.5257 -0.3520  0.0156  0.5690  0.9269 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  10.7680     0.5497    19.6  4.8e-08 ***
-timePoints    9.9452     0.0886   112.2  4.4e-14 ***
+(Intercept)  11.1990     0.5642    19.9  4.3e-08 ***
+timePoints    9.8327     0.0909   108.1  6.0e-14 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 0.805 on 8 degrees of freedom
+Residual standard error: 0.826 on 8 degrees of freedom
 Multiple R-squared:  0.999, Adjusted R-squared:  0.999 
-F-statistic: 1.26e+04 on 1 and 8 DF,  p-value: 4.43e-14
+F-statistic: 1.17e+04 on 1 and 8 DF,  p-value: 5.98e-14
 </code></pre>
 
 <pre><code class="r">coefficients(fit)
 </code></pre>
 
 <pre><code>(Intercept)  timePoints 
-     10.768       9.945 
+     11.199       9.833 
 </code></pre>
 
-<pre><code class="r">
+<pre><code class="r"># Extract the intercept and slope parameters from our linear model fit
 intercept &lt;- coefficients(fit)[1]
 slope     &lt;- coefficients(fit)[2]
-
-model &lt;- function(t) { (slope * t) + intercept }
-print(p + geom_abline(slope = slope, intercept = intercept, color = &quot;lightblue&quot; ) )
+# Plot the model as an abline on top of our data
+print(p + geom_abline( slope = slope
+                     , intercept = intercept
+                     , color = &quot;lightblue&quot; )
+                     )
 </code></pre>
 
 <p><img src="img/models-13.png" alt="plot of chunk models-1"/> </p>
 
-<pre><code class="r">
+<pre><code class="r"># Perform a one-way GLM ANOVA on the sample diamonds data set
 ggplot(diamonds, aes( clarity, price) ) + geom_boxplot()
 </code></pre>
 
@@ -109,7 +112,8 @@ ggplot(diamonds, aes( clarity, price) ) + geom_boxplot()
 
 <p><img src="img/models-15.png" alt="plot of chunk models-1"/> </p>
 
-<pre><code class="r">aov( price ~ color, diamonds )
+<pre><code class="r">a &lt;- aov( price ~ color, diamonds )
+print(a)
 </code></pre>
 
 <pre><code>Call:
@@ -122,6 +126,16 @@ Deg. of Freedom         6     53933
 
 Residual standard error: 3927
 Estimated effects may be unbalanced
+</code></pre>
+
+<pre><code class="r">summary(a)
+</code></pre>
+
+<pre><code>               Df   Sum Sq  Mean Sq F value Pr(&gt;F)    
+color           6 2.68e+10 4.47e+09     290 &lt;2e-16 ***
+Residuals   53933 8.32e+11 1.54e+07                   
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 </code></pre>
 
         

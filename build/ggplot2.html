@@ -35,13 +35,13 @@
         
         <h1>Grammar of Graphics in R (ggplot2)</h1>
 
-<p>Base R graphics are extremely rich, but the defaults and programming approach are pretty ugly and outdated.  Hadley Wickham&#39;s <code>ggplot2</code> package for R, inspired by <a href="http://www.amazon.com/The-Grammar-Graphics-Statistics-Computing/dp/0387245448">Leland Wilkinson&#39;s call for a grammer of graphics</a> in data visualization, is a far better platform for new commers to R.  </p>
+<p>Although the base graphics capabilities provided by R are extremely flexible and powerful, the defaults visual paramters and programming interface are pretty ugly and outdated.  Hadley Wickham&#39;s <code>ggplot2</code> package, inspired by <a href="http://www.amazon.com/The-Grammar-Graphics-Statistics-Computing/dp/0387245448">Leland Wilkinson&#39;s call for a grammer of graphics</a>, is a far better easier platform to work with and is a better choice new commers to R.  </p>
 
-<p>In this tutorial, we&#39;ll explore the <code>ggplot2</code> package, making some very pretty graphs!</p>
+<p>So in this tutorial, we&#39;ll focus on introducing plotting in R using the <code>ggplot2</code> package instead of the base <code>plot(...)</code> function.  Hopefully you&#39;ll be excited by how easy it is to create some stunning plots!</p>
 
 <h3>Stock R graphics: versatile but ugly</h3>
 
-<p>Graphics and data visualization are built into the core of the R environment.  The <code>plot(...)</code> function is highly context-aware and it is a great place to start whenever you are exploring new data structures or statistical functions.</p>
+<p>Graphics and data visualization are built into the core of the R environment.  The <code>plot(...)</code> function is highly context-aware and it is a safe place to start whenever you are exploring new data structures or statistical functions.</p>
 
 <p>For example, if you want to make a simple scatter plot, you can pass in two vectors of values:</p>
 
@@ -57,27 +57,30 @@
 
 <p><img src="img/ggplot2-2.png" alt="plot of chunk ggplot2-2"/> </p>
 
-<p>Calling <code>plot(...)</code> on data.frame&#39;s, linear models, or regressions will produce sensible data visualizations.  It is an incredibly versatile wrapper for producing visualizations of nearly any data structure produced or consumed by base R functions.  </p>
+<p>Calling <code>plot(...)</code> on data.frame&#39;s, linear models, or regressions will produce sensible data visualizations.  It is an incredibly versatile wrapper for producing visualizations of nearly any data structure produced or consumed by base R functions.</p>
 
-<p>Unfortunately, none of these will be terribly attractive.  Moreover, if you want to customize the graphics parameters used by <code>plot(...)</code> you&#39;ll find yourself opening a giant can of worms (see <code>?par</code>).</p>
+<p>Unfortunately, none of these plots will be terribly attractive.  Moreover, if you want to customize the graphics parameters used by <code>plot(...)</code> you&#39;ll find yourself opening a giant can of worms (see <code>?par</code>).</p>
 
 <p>Because <code>plot(...)</code> is so powerful, it is also very messy.  In response to the messiness of <code>plot(...)</code> a few community efforts have arisen to try to simplify, and thereby contrain, data visualization in R.  By far the most well-engineered and widely adopted of these community projects is the <code>ggplot2</code> package from <a href="http://had.co.nz/">Hadley Wickham</a>.</p>
 
 <h3>ggplot2</h3>
 
-<p>If it isn&#39;t already available, you can install the <code>ggplot2</code> package by running <code>install.packages(&quot;ggplot2&quot;)</code>.  Once the package is installed, loading ggplot2 for use in a script or at the console can be done by calling <code>library(ggplot2)</code>.</p>
+<p>If it isn&#39;t already available, you can install the <code>ggplot2</code> package by running <code>install.packages(&quot;ggplot2&quot;)</code>.  Once the package is installed, loading ggplot2 for use in a script or at the console can be done using the <code>library</code> function:</p>
 
-<p>In this tutorial, I&#39;ll demonstrate some example uses of ggplot2, but for many more ideas of what you can do with the library see the full documentation:  <a href="http://docs.ggplot2.org/">docs.ggplot2.org</a>.</p>
+<pre><code class="r">library(ggplot2)
+</code></pre>
+
+<p>In this tutorial, I&#39;ll demonstrate some example uses of <code>ggplot2</code>, but for many more ideas of what you can do with the library see the full documentation:  <a href="http://docs.ggplot2.org/">docs.ggplot2.org</a>.</p>
 
 <p>For these examples we&#39;ll use the built in <code>diamonds</code> dataset.  See <code>?diamonds</code> for detailed information about this sample data.</p>
 
 <h3>Constructing a plot</h3>
 
-<p>The general workflow for constructing plots using ggplot2 will be to first describe the structure of the data that you want to visualize and then apply visualization functions to that structure.  Although this coding idiom, and the syntax that has been designed to support it, might feel strange at first you will hopefully soon come to appreciate the elegance that comes from separating the description of <em>what</em> data you want to visualize from the particulars of <em>how</em> you want to project that visualization.  Let&#39;s look at an example.</p>
+<p>The general workflow for constructing plots using <code>ggplot2</code> will be to first describe the structure of the data that you want to visualize and then apply visualization functions to that structure.  Although this coding idiom, and the syntax that has been designed to support it, might feel strange at first you will soon come to appreciate the elegance of separating your description of <em>what</em> data you want to visualize from the particulars of <em>how</em> you want to draw that visualization.  This separation will feel very strange at first if you are coming from other plotting/graphing platforms which generally conflate these two concerns.  However, as you walk through the following examples hopefully the power and <em>flexibility</em> of this design pattern will become clear!</p>
 
-<p>First, we&#39;ll initialize a ggplot2 object that describes both the source of the data we want to visualize and the relationship between variables we are interested (called the &ldquo;aesthetic mapping&rdquo; in ggplot lingo):</p>
+<p>The first step in producing a <code>ggplot2</code> visualization is to initialize a data structure that describes the <strong>(1)</strong> source of the data we want to work with and <strong>(2)</strong> the relationship between variables that we want to visualize (this is called the &ldquo;aesthetic mapping&rdquo; in <code>ggplot</code> lingo):</p>
 
-<pre><code class="r"># Structure of the diamonds dataset
+<pre><code class="r"># Here&#39;s the structure of the diamonds dataset
 head(diamonds)
 </code></pre>
 
@@ -90,33 +93,28 @@ head(diamonds)
 6  0.24 Very Good     J    VVS2  62.8    57   336 3.94 3.96 2.48
 </code></pre>
 
-<pre><code class="r">
-# Load ggplot2
-library(ggplot2)
-
-# Construct a ggplot object to visualize the relationship between clarity 
+<pre><code class="r"># Construct a ggplot object to visualize the relationship between clarity 
 # and depth
 p &lt;- ggplot(diamonds, aes(clarity, depth))
 </code></pre>
 
-<p>The <code>aes</code> function in the above block sets up the structure of our visualization: we&#39;re interested in considering depth (quantitative) as a function of clarity (qualitative).  The <code>p</code> object doesn&#39;t yet hold any information about <em>how</em> this relationship should be visualized, on the structure of <em>what</em> is being compared.</p>
+<p>The <code>aes</code> function in the above block sets up the structure of our visualization: we&#39;re interested in considering depth (quantitative) as a function of clarity (qualitative).  The <code>p</code> object doesn&#39;t yet hold any information about <em>how</em> this relationship should be visualized, only the structure of <em>what</em> is being visualized.</p>
 
-<p>You can use the <code>+</code> operator to add visualization functions to this underlying structure to actually produce plots.  The data projection functions all start with <code>geom_</code>.  For example, if we want points:</p>
+<p>You can use the <code>+</code> operator to add visualization functions to this underlying structure to actually produce plots.  The data projection functions all start with <code>geom_</code>.  For example, if we want points on our plot we use <code>geom_point()</code>:</p>
 
 <pre><code class="r">p + geom_point()
 </code></pre>
 
-<p><img src="img/ggplot2-4.png" alt="plot of chunk ggplot2-4"/> </p>
-
-<p>Alternatively, we can easily visualize this relationsip using boxplots:</p>
-
-<pre><code class="r"># Box plot
-p + geom_boxplot()
-</code></pre>
-
 <p><img src="img/ggplot2-5.png" alt="plot of chunk ggplot2-5"/> </p>
 
-<p>As you can see, keeping with the spirit of the R environment, ggplot2 is designed to make it easy to rapidly iterate over different visualization and analysis approaches to your data interactively in the console.  Simply take your underlying ggplot2 object describing data relationships and appply different visualization techniques to find one that suites your project the best!.</p>
+<p>Switching to a different data projection, like a boxplot, is as simple as &ldquo;adding&rdquo; a different <code>geom_</code> to our original data structure:</p>
+
+<pre><code class="r">p + geom_boxplot()
+</code></pre>
+
+<p><img src="img/ggplot2-6.png" alt="plot of chunk ggplot2-6"/> </p>
+
+<p>As you can see, keeping with the spirit of the R environment, <code>ggplot2</code> is designed to make it easy to rapidly iterate over different visualization and analysis approaches as you work interactively in the console.  Simply take your underlying <code>ggplot2</code> object describing data relationships and apply different visualization techniques to find one that suites your needs!</p>
 
 <h3>Single variable distributions</h3>
 
@@ -124,7 +122,6 @@ p + geom_boxplot()
 
 <pre><code class="r"># Visualize the distribution of the depth variable
 p2 &lt;- ggplot(diamonds, aes(depth))
-
 # Histogram
 p2 + geom_histogram()
 </code></pre>
@@ -133,64 +130,65 @@ p2 + geom_histogram()
 this.
 </code></pre>
 
-<p><img src="img/ggplot2-61.png" alt="plot of chunk ggplot2-6"/> </p>
+<p><img src="img/ggplot2-71.png" alt="plot of chunk ggplot2-7"/> </p>
 
-<pre><code class="r">
-# Density distribution
+<pre><code class="r"># Density distribution
 p2 + geom_density()
 </code></pre>
 
-<p><img src="img/ggplot2-62.png" alt="plot of chunk ggplot2-6"/> </p>
+<p><img src="img/ggplot2-72.png" alt="plot of chunk ggplot2-7"/> </p>
 
 <h3>Setting axis limits</h3>
 
-<p>There are other kinds of function calls that you can apply to ggplot objects other than just the <code>geom_</code> functions.  For example, to set the x-axis limits on the above plot we could:</p>
+<p>There are other kinds of functions that can be applied to ggplot objects to tweak the visualization.  For example, to set the axis limits on the above plot we can apply the <code>xlim</code> or <code>ylim</code> functions:</p>
 
 <pre><code class="r"># Set x-axis limits
 p2 + geom_density() + xlim( c(55, 65) )
 </code></pre>
 
-<p><img src="img/ggplot2-7.png" alt="plot of chunk ggplot2-7"/> </p>
+<pre><code>Warning: Removed 857 rows containing non-finite values (stat_density).
+</code></pre>
 
-<p>You&#39;ll see you get a warning telling you that these limits have caused some data to be excluded from your plot.</p>
+<p><img src="img/ggplot2-8.png" alt="plot of chunk ggplot2-8"/> </p>
+
+<p>When we run this code, we get a warning telling you that these limits have caused some data to be excluded from your plot.  There are a number of useful sanity checks built into <code>ggplot2</code> that warn you if your visualization parameters are running the risk of producing misleading results!</p>
 
 <h3>Two quantitative variables</h3>
 
-<p>Of course, we can also visualize the relationship between two quantitative variables:</p>
+<p>Of course, we can also visualize the relationship between two quantitative variables using a scatter plot:</p>
 
 <pre><code class="r"># Visualize depth as a function of price
 p3 &lt;- ggplot( diamonds, aes(price, depth) )
-
 # Use points (scatter plot)
 p3 + geom_point()
 </code></pre>
 
-<p><img src="img/ggplot2-8.png" alt="plot of chunk ggplot2-8"/> </p>
+<p><img src="img/ggplot2-9.png" alt="plot of chunk ggplot2-9"/> </p>
 
 <h3>Data grouping and secondary visualizations</h3>
 
 <p>In your aethetic mappings, you can describe more than just the initial structure of the data projection.  For example, let&#39;s say that we want to visualize the categorical variable <code>clarity</code>, when comparing <code>price</code> and <code>depth</code>:</p>
 
-<pre><code class="r"># Visualize depth as a function of price, use color to visualize clarity label
+<pre><code class="r"># Visualize depth as a function of price; use color to visualize clarity label
 p4 &lt;- ggplot( diamonds, aes(price, depth, color = clarity) )
-
 # Use points (scatter plot)
 p4 + geom_point()
 </code></pre>
 
-<p><img src="img/ggplot2-9.png" alt="plot of chunk ggplot2-9"/> </p>
+<p><img src="img/ggplot2-10.png" alt="plot of chunk ggplot2-10"/> </p>
 
 <p>For visualizations that use solid objects, you can also specify a <code>fill</code> argument:</p>
 
 <pre><code class="r">p5 &lt;- ggplot(diamonds, aes( price, fill = clarity) ) 
-
 # Setting the alpha channel to 50% makes the density plots transparent
 p5 + geom_density(alpha = 0.5)
 </code></pre>
 
-<p><img src="img/ggplot2-10.png" alt="plot of chunk ggplot2-10"/> </p>
+<p><img src="img/ggplot2-11.png" alt="plot of chunk ggplot2-11"/> </p>
 
-<p>There are many more options for visualizations schemes (<code>geom_</code> functions), for mapping annotation variables onto additional visualization parameters (ex: <code>color</code>, <code>fill</code>, <code>size</code>, <code>alpha</code>), and for manipulating axes, labels and legends (ex: <code>xlim</code>, <code>ylim</code>, <code>labs</code>, <code>coord_</code>, <code>scale_</code>).  See the excellent ggplot2 documentation for the full list with useful examples:  <a href="http://docs.ggplot2.org/">docs.ggplot2.org</a>.</p>
+<p>There are many more options for visualizations schemes (<code>geom_</code> functions), for mapping annotation variables onto additional visualization parameters (ex: <code>color</code>, <code>fill</code>, <code>size</code>, <code>alpha</code>), and for manipulating axes, labels and legends (ex: <code>xlim</code>, <code>ylim</code>, <code>labs</code>, <code>coord_</code>, <code>scale_</code>).  </p>
+
+<p>See the excellent ggplot2 documentation for the full list of functions with useful examples:  <a href="http://docs.ggplot2.org/">docs.ggplot2.org</a>.</p>
 
         
         </div>

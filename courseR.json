@@ -24,7 +24,12 @@
                }
              , { "content"     : "models"
                , "title"       : "Fitting models for statistical analysis"
-               , "description" : "A quick introduction to the R formula syntax with examples including a GLM ANOVA."
+               , "description" : "WIP:  A quick introduction to the R formula syntax with examples including a GLM ANOVA."
+               , "section"     : "Background"
+               }
+             , { "content"     : "clustering"
+               , "title"       : "Heatmaps and hierarchical clustering"
+               , "description" : "WIP:  A quick walkthrough of how to use hierarchical clustering and heatmaps to visualize gene expression data."
                , "section"     : "Background"
                }
              ]

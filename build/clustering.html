@@ -72,14 +72,14 @@ plot(fit)
 
 <pre><code class="r"># Heatmap of the matrix
 heatmap(m.LiCl)
+# gplots provides the colorpanel function, making it easy to generate color
+# gradients install.packages(&quot;gplots&quot;) # you made need to install this package
+library(gplots)
 </code></pre>
 
 <p><img src="img/clustering-12.png" alt="plot of chunk clustering-1"/> </p>
 
-<pre><code class="r"># gplots provides the colorpanel function, making it easy to generate color
-# gradients install.packages(&quot;gplots&quot;) # you made need to install this package
-library(gplots)
-# Use heatmap with a custom color gradient
+<pre><code class="r"># Use heatmap with a custom color gradient
 heatmap( m.LiCl
        , col  = colorpanel(100, &quot;royalblue3&quot;, &quot;black&quot;, &quot;yellow&quot;)
        )

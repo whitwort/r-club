@@ -37,15 +37,12 @@
 
 <p>More details coming soon, but here&#39;s the code we went over this week.  Sample data can be <a href="data/LiCl.txt">downloaded here</a>.</p>
 
-<pre><code class="r"># Load a sample microarray data set.  Your path will depend on where you saved
-# this file.
+<pre><code class="r"># Load a sample microarray data set.  Your path will depend on where you saved this file.
 LiCl &lt;- read.delim(&quot;~/r-club/data/LiCl.txt&quot;)
-# The NAME column contains unique gene identifiers, so we&#39;ll use these as the
-# row labels in our data.frame and remove the NAME column from the table.
+# The NAME column contains unique gene identifiers, so we&#39;ll use these as the row labels in our data.frame and remove the NAME column from the table.
 rownames(LiCl) &lt;- LiCl$NAME
 LiCl$NAME &lt;- NULL
-# Convert the gene expression data to a 2D matrix; omit genes with missing
-# values.  We&#39;ll trim off the rownames to make the dendograms readable.
+# Convert the gene expression data to a 2D matrix; omit genes with missing values.  We&#39;ll trim off the rownames to make the dendograms readable.
 m.LiCl &lt;- as.matrix( na.omit(LiCl) )
 rownames(m.LiCl) &lt;- NULL
 # Distance matrix for gene expression vectors (these are log2(Exp/Ref) values)
@@ -72,14 +69,13 @@ plot(fit)
 
 <pre><code class="r"># Heatmap of the matrix
 heatmap(m.LiCl)
-# gplots provides the colorpanel function, making it easy to generate color
-# gradients install.packages(&quot;gplots&quot;) # you made need to install this package
-library(gplots)
 </code></pre>
 
 <p><img src="img/clustering-12.png" alt="plot of chunk clustering-1"/> </p>
 
-<pre><code class="r"># Use heatmap with a custom color gradient
+<pre><code class="r"># gplots provides the colorpanel function, making it easy to generate color gradients install.packages(&quot;gplots&quot;) # you made need to install this package
+library(gplots)
+# Use heatmap with a custom color gradient
 heatmap( m.LiCl
        , col  = colorpanel(100, &quot;royalblue3&quot;, &quot;black&quot;, &quot;yellow&quot;)
        )
@@ -96,8 +92,7 @@ heatmap( m.LiCl
 
 <p><img src="img/clustering-14.png" alt="plot of chunk clustering-1"/> </p>
 
-<pre><code class="r"># Specify color saturation points (all log2 values =&gt;2.5 or =&lt;-2.5 are drawn as
-# the same color)
+<pre><code class="r"># Specify color saturation points (all log2 values =&gt;2.5 or =&lt;-2.5 are drawn as the same color)
 heatmap( m.LiCl
        , col  = colorpanel(100, &quot;royalblue3&quot;, &quot;black&quot;, &quot;yellow&quot;)
        , Colv = NA
@@ -107,8 +102,7 @@ heatmap( m.LiCl
 
 <p><img src="img/clustering-15.png" alt="plot of chunk clustering-1"/> </p>
 
-<pre><code class="r"># Use RowSideColors to highlight genes with the &quot;protein biosynthesis&quot; GO
-# process annotation
+<pre><code class="r"># Use RowSideColors to highlight genes with the &quot;protein biosynthesis&quot; GO process annotation
 heatmap( m.LiCl
        , col  = colorpanel(100,&quot;royalblue3&quot;,&quot;black&quot;,&quot;yellow&quot;)
        , Colv = NA

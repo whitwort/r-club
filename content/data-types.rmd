@@ -15,9 +15,9 @@ Let's try entering some simple math expressions to see how this interaction with
 6.7 / 8.9
 ````
 
-As you might expect, R recognizes the standard syntax for numbers and mathematical operators.  When you've enter a complete [expression](http://en.wikipedia.org/wiki/Expression_(computer_science)) at the command line and hit "enter", R [evaluates](http://en.wikipedia.org/wiki/Evaluation_strategy) the result of that expression.  If you don't tell R what to do with the result, it will just print out a representation of the value on the next line.
+As you might expect, R recognizes the standard syntax for numbers and mathematical operators.  When you've enter a complete [expression][] at the command line and hit "enter", R [evaluates](http://en.wikipedia.org/wiki/Evaluation_strategy) the result of that expression.  If you don't tell R what to do with the result, it will just print out a representation of the value on the next line.
 
-Often, though, you will want to perform a calculation and save the result for later use.  If you've used Excel, you've probably used cells on a worksheet to hold the results of calculations based on the data in other cells.  In R we can save the results of computations in [variables](http://en.wikipedia.org/wiki/Variable_(computer_science)).  To do this we'll use the assignment operator, which is a little arrow in R `<-`.
+Often, though, you will want to perform a calculation and save the result for later use.  If you've used Excel, you've probably used cells on a worksheet to hold the results of calculations based on the data in other cells.  In R we can save the results of computations in [variables][].  To do this we'll use the assignment operator, which is a little arrow in R `<-`.
 
 (If you're coming from another programming language and the arrow syntax bugs you, you *can* use `=` operator for general assignment -- see the R help pages for a few important edge cases.)
 
@@ -55,7 +55,7 @@ length(10)
 length(c)
 ````
 
-Above, `length` is the first example we've seen of an R [function](http://en.wikipedia.org/wiki/Function_(programming)).  In programming, functions are analogous to their mathematical counter parts: they take in one or more values and evaluate to a new value.  The R syntax for running, or "calling", a function is in the form of `functionName(value1, value2, ...)`.
+Above, `length` is the first example we've seen of an R [function][].  In programming, functions are analogous to their mathematical counter parts: they take in one or more values and evaluate to a new value.  The R syntax for running, or "calling", a function is in the form of `functionName(value1, value2, ...)`.
 
 The `length` function has reported that we've been working with vectors of 1 element so far.  To **c**ompose a vector with more than one element, we'll use the `c()` function:
 
@@ -130,4 +130,8 @@ Most R functions will either understand how to deal with missing data, or issue 
 ### Getting help
 
 Manual pages for all of the functions in base R and R packages are built into the language.  To quickly get help for any function you can use the `?` syntax.  For example, to get the help page for the `c()` function we used above enter `?c`.  RStudio also has a search box on the help tab.
+
+[function]: http://en.wikipedia.org/wiki/Function_(programming)
+[variables]: http://en.wikipedia.org/wiki/Variable_(computer_science)
+[expression]: http://en.wikipedia.org/wiki/Expression_(computer_science)
 

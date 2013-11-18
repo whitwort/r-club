@@ -50,8 +50,7 @@ The first step in producing a `ggplot2` visualization is to initialize a data st
 ```{r}
 # Here's the structure of the diamonds dataset
 head(diamonds)
-# Construct a ggplot object to visualize the relationship between clarity 
-# and depth
+# Construct a ggplot object to visualize the relationship between clarity and depth
 p <- ggplot(diamonds, aes(clarity, depth))
 ````
 

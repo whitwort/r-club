@@ -67,26 +67,26 @@ Call:
 lm(formula = response ~ timePoints, data = d)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--1.3789 -0.5943  0.0858  0.4305  2.0774 
+   Min     1Q Median     3Q    Max 
+-1.638 -0.783 -0.152  0.679  1.559 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   10.190      0.736    13.8  7.1e-07 ***
-timePoints    10.018      0.119    84.5  4.3e-13 ***
+(Intercept)    9.266      0.778    11.9  2.3e-06 ***
+timePoints    10.126      0.125    80.7  6.2e-13 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 1.08 on 8 degrees of freedom
+Residual standard error: 1.14 on 8 degrees of freedom
 Multiple R-squared:  0.999, Adjusted R-squared:  0.999 
-F-statistic: 7.14e+03 on 1 and 8 DF,  p-value: 4.3e-13
+F-statistic: 6.52e+03 on 1 and 8 DF,  p-value: 6.18e-13
 </code></pre>
 
 <pre><code class="r">coefficients(fit)
 </code></pre>
 
 <pre><code>(Intercept)  timePoints 
-      10.19       10.02 
+      9.266      10.126 
 </code></pre>
 
 <pre><code class="r"># Extract the intercept and slope parameters from our linear model fit

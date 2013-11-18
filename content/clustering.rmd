@@ -3,15 +3,12 @@
 More details coming soon, but here's the code we went over this week.  Sample data can be [downloaded here](data/LiCl.txt).
 
 ```{r message=FALSE}
-# Load a sample microarray data set.  Your path will depend on where you saved
-# this file.
+# Load a sample microarray data set.  Your path will depend on where you saved this file.
 LiCl <- read.delim("~/r-club/data/LiCl.txt")
-# The NAME column contains unique gene identifiers, so we'll use these as the
-# row labels in our data.frame and remove the NAME column from the table.
+# The NAME column contains unique gene identifiers, so we'll use these as the row labels in our data.frame and remove the NAME column from the table.
 rownames(LiCl) <- LiCl$NAME
 LiCl$NAME <- NULL
-# Convert the gene expression data to a 2D matrix; omit genes with missing
-# values.  We'll trim off the rownames to make the dendograms readable.
+# Convert the gene expression data to a 2D matrix; omit genes with missing values.  We'll trim off the rownames to make the dendograms readable.
 m.LiCl <- as.matrix( na.omit(LiCl) )
 rownames(m.LiCl) <- NULL
 # Distance matrix for gene expression vectors (these are log2(Exp/Ref) values)
@@ -23,8 +20,7 @@ print(fit)
 plot(fit)
 # Heatmap of the matrix
 heatmap(m.LiCl)
-# gplots provides the colorpanel function, making it easy to generate color
-# gradients install.packages("gplots") # you made need to install this package
+# gplots provides the colorpanel function, making it easy to generate color gradients install.packages("gplots") # you made need to install this package
 library(gplots)
 # Use heatmap with a custom color gradient
 heatmap( m.LiCl
@@ -35,15 +31,13 @@ heatmap( m.LiCl
        , col  = colorpanel(100, "royalblue3", "black", "yellow")
        , Colv = NA
        )
-# Specify color saturation points (all log2 values =>2.5 or =<-2.5 are drawn as
-# the same color)
+# Specify color saturation points (all log2 values =>2.5 or =<-2.5 are drawn as the same color)
 heatmap( m.LiCl
        , col  = colorpanel(100, "royalblue3", "black", "yellow")
        , Colv = NA
        , zlim = c(-2.5, 2.5)
        )
-# Use RowSideColors to highlight genes with the "protein biosynthesis" GO
-# process annotation
+# Use RowSideColors to highlight genes with the "protein biosynthesis" GO process annotation
 heatmap( m.LiCl
        , col  = colorpanel(100,"royalblue3","black","yellow")
        , Colv = NA

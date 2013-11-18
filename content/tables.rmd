@@ -47,7 +47,6 @@ If you're working in [RStudio](http://www.rstudio.com/), you can use the "Import
 To follow along with this example, you can download the genetic code table and save it in your current working directory:  [codons.txt](data/codons.txt).  This table has two columns:  "codon" and "aminoAcid."  To load the table into a variable:
 
 ```{r echo=FALSE}
-print(getwd())
 codons <- read.table("~/r-club/data/codons.txt", header = TRUE, stringsAsFactors = FALSE)
 ````
 
